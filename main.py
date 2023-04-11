@@ -15,9 +15,7 @@ import click
 import threading
 
 
-
 def click():
-
     count_file = "D:\\Title_Files\\Config\\count.txt"
 
     if not os.path.exists(count_file):
@@ -33,14 +31,12 @@ def click():
         f.write(str(count))
 
     print(count)
-
     workbook = openpyxl.load_workbook('D:\\Title_Files\\Logs\\Logs.xlsx')
     worksheet = workbook.active
     start_time = datetime.datetime.now()
     worksheet["A" + str(count)] = os.getlogin()
     worksheet["B" + str(count)] = start_time
     workbook.save('D:\\Title_Files\\Logs\\Logs.xlsx')
-
 
     #getting Key from JSON file
     with open('D:\\Title_Files\\Config\\Title_conig_file.json', 'r') as f:
@@ -59,7 +55,6 @@ def click():
 
 if __name__=='__main__':
     click()
-
 '''
 w=Tk()
 w.title("Netro_search")

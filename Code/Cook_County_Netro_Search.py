@@ -32,8 +32,7 @@ def Final_A():
     from urllib.parse import urljoin
     import requests
 
-    chrome_driver = 'D:\Title_Files\chromedriver_win32\chromedriver.exe'
-    driver = webdriver.Chrome(chrome_driver)
+
 
     dataframe1 = pd.read_excel(
         'D:\\Title_Files\\Input\\Cook_county.xlsx')
@@ -47,9 +46,9 @@ def Final_A():
 
 
 
-            # chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
+            chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
 
-            # driver = webdriver.Chrome(chrome_driver)
+            driver = webdriver.Chrome(chrome_driver)
 
             driver.maximize_window()
             driver.get('https://crs.cookcountyclerkil.gov/Search/Additional')
@@ -89,7 +88,7 @@ def Final_A():
             start_time = datetime.datetime.now()
             worksheet['C' + str(int(i + 2))] = start_time
             k = 1
-            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + str(EXCELAPN))
+            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + str(int(EXCELAPN)))
             while k < int(COunt):
                 try:
                     # if k < int(COunt):
@@ -121,7 +120,7 @@ def Final_A():
                             with open(
                                     'D:\\Title_Files\\Output\\COOK_COUNTY\\' + str(
                                         int(EXCELAPN)) + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
-                                for chunk in r.iter_content(chunk_size=10):
+                                for chunk in r.iter_content(chunk_size=20):
                                     fd.write(chunk)
 
                         finally:
@@ -131,8 +130,7 @@ def Final_A():
                             with open(
                                     'D:\\Title_Files\\Output\\COOK_COUNTY\\' + str(
                                         int(EXCELAPN)) + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
-                                time.sleep(1)
-                                for chunk in r.iter_content(chunk_size=10):
+                                for chunk in r.iter_content(chunk_size=20):
                                     fd.write(chunk)
 
                         k = k + 1
@@ -144,11 +142,11 @@ def Final_A():
                     k = k + 1
                     driver.back()
 
-    end_time = datetime.datetime.now()
-    worksheet['D' + str(int(i + 2))] = end_time
-    worksheet['E' + str(int(i + 2))] = "Completed"
-    worksheet['G' + str(int(i + 2))] = str(int(COunt))
-    workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
+            end_time = datetime.datetime.now()
+            worksheet['D' + str(int(i + 2))] = end_time
+            worksheet['E' + str(int(i + 2))] = "Completed"
+            worksheet['G' + str(int(i + 2))] = str(int(COunt))
+            workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
     source = 'D:\\Title_Files\\Input\\Cook_county.xlsx'
     destination = 'D:\\Title_Files\\Processed\\Cook_county.xlsx'
     shutil.move(source, destination)
