@@ -31,7 +31,6 @@ def Final_A():
     import openpyxl
     from urllib.parse import urljoin
     import requests
-    from pyhtml2pdf import converter
 
 
 
@@ -45,7 +44,7 @@ def Final_A():
 
             EXCELNAME = dataframe1['NAME'][i]
 
-            EXCELORDERNO = dataframe1['Order No'][i]
+
 
             chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
 
@@ -63,10 +62,8 @@ def Final_A():
             driver.find_element(By.XPATH,
                                 '/html/body/div[2]/div/div[3]/div/div/div[3]/div[2]/div/div/form/div[1]/div/input').send_keys(
                 EXCELNAME, Keys.ENTER)
-            #p=driver.current_url   # main page URL Address
-            #time.sleep(3)
 
-
+            time.sleep(3)
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
             #df.to_excel("C:\\Users\\sachin.j\\PycharmProjects\\pythonProject5\\venv\\Excel.xlsx", index=False)
@@ -93,20 +90,11 @@ def Final_A():
                 'D:\\Title_Files\\Input\\Cook_county.xlsx')
             worksheet = workbook.active
             start_time = datetime.datetime.now()
-            worksheet['F' + str(int(i + 2))] = start_time
+            worksheet['C' + str(int(i + 2))] = start_time
             k = 1
-            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" +"Order No " + str(int(EXCELORDERNO)))
-            #converter.convert(p,"D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Index Results.pdf')
-            df.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(EXCELORDERNO))+'\\Index Results.xlsx', index=False)
-            converter.convert(driver.current_url, "D:\Title_Files\Output\COOK_COUNTY\Order No 988635\\APN Results.pdf")
-            height = driver.execute_script("return document.body.scrollHeight")
-            width = driver.execute_script("return document.body.scrollWidth")
-
-            driver.set_window_size(width, height)
-            screenshot = driver.find_element(By.TAG_NAME, 'body').screenshot_as_png
-
-            with open("D:\\Title_Files\\image.png", 'wb') as f:
-                f.write(screenshot)
+            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + str(int(EXCELAPN)))
+            df.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + str(int(EXCELAPN))+'\\Index Results.xlsx', index=False)
+            input()
             while k < int(COunt):
                 try:
                     # if k < int(COunt):
@@ -136,8 +124,9 @@ def Final_A():
                             r = requests.get(url, stream=True)
                             print(r.status_code)
                             with open(
-                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No "+str(int(EXCELORDERNO))
-                                         + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
+                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + str(
+                                        int(EXCELAPN)) + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
+
                                 for chunk in r.iter_content(chunk_size=20):
                                     fd.write(chunk)
 
@@ -146,8 +135,9 @@ def Final_A():
                             r = requests.get(url, stream=True)
                             print(r.status_code)
                             with open(
-                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " +str(int(EXCELORDERNO))
-                                         + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
+                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + str(
+                                        int(EXCELAPN)) + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
+
                                 for chunk in r.iter_content(chunk_size=20):
                                     fd.write(chunk)
 
@@ -161,10 +151,10 @@ def Final_A():
                     driver.back()
 
             end_time = datetime.datetime.now()
-            worksheet['G' + str(int(i + 2))] = end_time
-            worksheet['H' + str(int(i + 2))] = "Completed"
+            worksheet['D' + str(int(i + 2))] = end_time
+            worksheet['E' + str(int(i + 2))] = "Completed"
             #worksheet['F' + str(int(i + 2))] = str(int(COunt)-int(1)) #-int(1)
-            worksheet['I' + str(int(i + 2))]=str(end_time-start_time)
+            worksheet['F' + str(int(i + 2))]=str(end_time-start_time)
 
             workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
     source = 'D:\\Title_Files\\Input\\Cook_county.xlsx'
