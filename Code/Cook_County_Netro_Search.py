@@ -32,6 +32,8 @@ def Final_A():
     from urllib.parse import urljoin
     import requests
     from pyhtml2pdf import converter
+    from selenium.webdriver.chrome.options import Options
+    import pyautogui
 
 
 
@@ -47,9 +49,16 @@ def Final_A():
 
             EXCELORDERNO = dataframe1['Order No'][i]
 
+            #order number is created
+            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)))
+
             chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
 
-            driver = webdriver.Chrome(chrome_driver)
+            chrome_options = Options()
+            chrome_options.add_argument('--kiosk-printing')
+            chrome_options.add_argument('--disable-extensions')
+
+            driver = webdriver.Chrome(options=chrome_options)
 
             driver.maximize_window()
             driver.get('https://crs.cookcountyclerkil.gov/Search/Additional')
@@ -63,17 +72,39 @@ def Final_A():
             driver.find_element(By.XPATH,
                                 '/html/body/div[2]/div/div[3]/div/div/div[3]/div[2]/div/div/form/div[1]/div/input').send_keys(
                 EXCELNAME, Keys.ENTER)
-            #p=driver.current_url   # main page URL Address
-            #time.sleep(3)
 
-
+            #converter.convert(driver., "D:\Title_Files\PN Results.pdf")
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
-            #df.to_excel("C:\\Users\\sachin.j\\PycharmProjects\\pythonProject5\\venv\\Excel.xlsx", index=False)
 
-            q = driver.find_element(By.XPATH,
-                                    '/html/body/div[2]/div/div[3]/div/form/div[5]/div[4]/table/tbody/tr[2]/td[11]/a').get_attribute(
-                'href')
+
+
+
+            #to take print of Index Value
+            driver.execute_script('window.print();')
+            time.sleep(3)
+            path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
+            name="Index"
+            pyautogui.typewrite(path)
+            time.sleep(2)
+            pyautogui.press('enter')
+            pyautogui.typewrite(name)
+            time.sleep(2)
+            pyautogui.press('enter')
+            print("Done")
+            #time.sleep()
+
+            # need to un comment
+            #q = driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form/div[5]/div[4]/table/tbody/tr[2]/td[11]/a').get_attribute('href')
+            #height = driver.execute_script("return document.body.scrollHeight")
+            #width = driver.execute_script("return document.body.scrollWidth")
+
+            #driver.set_window_size(width, height)
+            #screenshot = driver.find_element(By.TAG_NAME, 'body').screenshot_as_png
+
+            #with open("D:\\Title_Files\\image.png", 'wb') as f:
+                #f.write(screenshot)
+
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
@@ -95,18 +126,11 @@ def Final_A():
             start_time = datetime.datetime.now()
             worksheet['F' + str(int(i + 2))] = start_time
             k = 1
-            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" +"Order No " + str(int(EXCELORDERNO)))
+            #os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" +"Order No " + str(int(EXCELORDERNO)))
             #converter.convert(p,"D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Index Results.pdf')
             df.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(EXCELORDERNO))+'\\Index Results.xlsx', index=False)
-            converter.convert(driver.current_url, "D:\Title_Files\Output\COOK_COUNTY\Order No 988635\\APN Results.pdf")
-            height = driver.execute_script("return document.body.scrollHeight")
-            width = driver.execute_script("return document.body.scrollWidth")
+            #converter.convert(driver.current_url, "D:\Title_Files\Output\COOK_COUNTY\Order No"+ str(int(EXCELORDERNO))+"\APN Results.pdf")
 
-            driver.set_window_size(width, height)
-            screenshot = driver.find_element(By.TAG_NAME, 'body').screenshot_as_png
-
-            with open("D:\\Title_Files\\image.png", 'wb') as f:
-                f.write(screenshot)
             while k < int(COunt):
                 try:
                     # if k < int(COunt):
@@ -172,6 +196,7 @@ def Final_A():
     shutil.move(source, destination)
 
     print("Completed")
+
 
     driver.close()
 
