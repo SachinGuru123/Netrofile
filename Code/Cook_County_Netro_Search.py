@@ -43,8 +43,9 @@ def Final_A():
     E = dataframe1[dataframe1.columns[0]].count()
     for i in range(E):
 
-            EXCELAPN = dataframe1['APN'][i]
-
+            EXCELAPN = str(dataframe1['APN'][i])
+            print(EXCELAPN)
+            input()
             EXCELNAME = dataframe1['NAME'][i]
 
             EXCELORDERNO = dataframe1['Order No'][i]
@@ -59,6 +60,8 @@ def Final_A():
             chrome_options.add_argument('--disable-extensions')
 
             driver = webdriver.Chrome(options=chrome_options)
+            ##################################################
+
 
             driver.maximize_window()
             driver.get('https://crs.cookcountyclerkil.gov/Search/Additional')
@@ -77,20 +80,24 @@ def Final_A():
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
-
-
-
             #to take print of Index Value
             driver.execute_script('window.print();')
-            time.sleep(3)
-            path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
+            time.sleep(4)
+            path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(EXCELORDERNO)
             name="Index"
             pyautogui.typewrite(path)
-            time.sleep(2)
+            time.sleep(1)
             pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+
+            time.sleep(2)
             pyautogui.typewrite(name)
-            time.sleep(2)
             pyautogui.press('enter')
+            time.sleep(2)
             print("Done")
             #time.sleep()
 
@@ -108,10 +115,10 @@ def Final_A():
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
-
             # print(q.split("=",4))
 
-            driver.get('https://crs.cookcountyclerkil.gov/Search/ResultByPin?id1=' + str(EXCELAPN))
+            driver.get('https://crs.cookcountyclerkil.gov/Search/ResultByPin?id1=' +str(EXCELAPN))
+
             COunt = driver.find_element(By.XPATH, '//*[@id="result"]/div[1]/div/span').text
             print(str(COunt))
             COunt = int(COunt) + 1

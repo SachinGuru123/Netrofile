@@ -31,6 +31,9 @@ def Final_A():
     import openpyxl
     from urllib.parse import urljoin
     import requests
+    from pyhtml2pdf import converter
+    from selenium.webdriver.chrome.options import Options
+    import pyautogui
 
 
 
@@ -44,11 +47,28 @@ def Final_A():
 
             EXCELNAME = dataframe1['NAME'][i]
 
+            EXCELORDERNO = dataframe1['Order No'][i]
+            print(EXCELAPN)
+            print(str(EXCELAPN)[:2])
+            print(str(EXCELAPN)[2:4])
+            print(str(EXCELAPN)[4:7])
+            print(str(EXCELAPN)[7:10])
+            print(str(EXCELAPN)[10:13])
 
+            input()
+
+            #order number is created
+            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)))
 
             chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
 
-            driver = webdriver.Chrome(chrome_driver)
+            chrome_options = Options()
+            chrome_options.add_argument('--kiosk-printing')
+            chrome_options.add_argument('--disable-extensions')
+
+            driver = webdriver.Chrome(options=chrome_options)
+            ##################################################
+
 
             driver.maximize_window()
             driver.get('https://crs.cookcountyclerkil.gov/Search/Additional')
@@ -63,21 +83,49 @@ def Final_A():
                                 '/html/body/div[2]/div/div[3]/div/div/div[3]/div[2]/div/div/form/div[1]/div/input').send_keys(
                 EXCELNAME, Keys.ENTER)
 
-            time.sleep(3)
-            a = driver.find_element(By.XPATH, '//table')
-            df = pd.read_html(a.get_attribute('outerHTML'))[0]
-            #df.to_excel("C:\\Users\\sachin.j\\PycharmProjects\\pythonProject5\\venv\\Excel.xlsx", index=False)
-
-            q = driver.find_element(By.XPATH,
-                                    '/html/body/div[2]/div/div[3]/div/form/div[5]/div[4]/table/tbody/tr[2]/td[11]/a').get_attribute(
-                'href')
+            #converter.convert(driver., "D:\Title_Files\PN Results.pdf")
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
+            #to take print of Index Value
+            driver.execute_script('window.print();')
+            time.sleep(4)
+            path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(EXCELORDERNO)
+            name="Index"
+            pyautogui.typewrite(path)
+            time.sleep(1)
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+
+            time.sleep(2)
+            pyautogui.typewrite(name)
+            pyautogui.press('enter')
+            time.sleep(2)
+            print("Done")
+            #time.sleep()
+
+            # need to un comment
+            #q = driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form/div[5]/div[4]/table/tbody/tr[2]/td[11]/a').get_attribute('href')
+            #height = driver.execute_script("return document.body.scrollHeight")
+            #width = driver.execute_script("return document.body.scrollWidth")
+
+            #driver.set_window_size(width, height)
+            #screenshot = driver.find_element(By.TAG_NAME, 'body').screenshot_as_png
+
+            #with open("D:\\Title_Files\\image.png", 'wb') as f:
+                #f.write(screenshot)
+
+            a = driver.find_element(By.XPATH, '//table')
+            df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
             # print(q.split("=",4))
 
-            driver.get('https://crs.cookcountyclerkil.gov/Search/ResultByPin?id1=' + str(EXCELAPN))
+            driver.get('https://crs.cookcountyclerkil.gov/Search/ResultByPin?id1=' +"0"+str(EXCELAPN))
+
             COunt = driver.find_element(By.XPATH, '//*[@id="result"]/div[1]/div/span').text
             print(str(COunt))
             COunt = int(COunt) + 1
@@ -90,11 +138,13 @@ def Final_A():
                 'D:\\Title_Files\\Input\\Cook_county.xlsx')
             worksheet = workbook.active
             start_time = datetime.datetime.now()
-            worksheet['C' + str(int(i + 2))] = start_time
+            worksheet['F' + str(int(i + 2))] = start_time
             k = 1
-            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + str(int(EXCELAPN)))
-            df.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + str(int(EXCELAPN))+'\\Index Results.xlsx', index=False)
-            input()
+            #os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" +"Order No " + str(int(EXCELORDERNO)))
+            #converter.convert(p,"D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Index Results.pdf')
+            df.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(EXCELORDERNO))+'\\Index Results.xlsx', index=False)
+            #converter.convert(driver.current_url, "D:\Title_Files\Output\COOK_COUNTY\Order No"+ str(int(EXCELORDERNO))+"\APN Results.pdf")
+
             while k < int(COunt):
                 try:
                     # if k < int(COunt):
@@ -124,9 +174,8 @@ def Final_A():
                             r = requests.get(url, stream=True)
                             print(r.status_code)
                             with open(
-                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + str(
-                                        int(EXCELAPN)) + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
-
+                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No "+str(int(EXCELORDERNO))
+                                         + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
                                 for chunk in r.iter_content(chunk_size=20):
                                     fd.write(chunk)
 
@@ -135,9 +184,8 @@ def Final_A():
                             r = requests.get(url, stream=True)
                             print(r.status_code)
                             with open(
-                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + str(
-                                        int(EXCELAPN)) + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
-
+                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " +str(int(EXCELORDERNO))
+                                         + '\\Doc' + str(k) + '   ' + str(Q) + '.pdf', 'wb') as fd:
                                 for chunk in r.iter_content(chunk_size=20):
                                     fd.write(chunk)
 
@@ -151,10 +199,10 @@ def Final_A():
                     driver.back()
 
             end_time = datetime.datetime.now()
-            worksheet['D' + str(int(i + 2))] = end_time
-            worksheet['E' + str(int(i + 2))] = "Completed"
+            worksheet['G' + str(int(i + 2))] = end_time
+            worksheet['H' + str(int(i + 2))] = "Completed"
             #worksheet['F' + str(int(i + 2))] = str(int(COunt)-int(1)) #-int(1)
-            worksheet['F' + str(int(i + 2))]=str(end_time-start_time)
+            worksheet['I' + str(int(i + 2))]=str(end_time-start_time)
 
             workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
     source = 'D:\\Title_Files\\Input\\Cook_county.xlsx'
@@ -162,6 +210,7 @@ def Final_A():
     shutil.move(source, destination)
 
     print("Completed")
+
 
     driver.close()
 
