@@ -36,6 +36,7 @@ def Final_A():
     import pyautogui
     import glob
     import re,PyPDF2
+    from pyhtml2pdf import converter
 ########################
     folder_path = 'D:\\Title_Files\\Order Sheets'
     pdf_path = glob.glob(os.path.join(folder_path, "*.pdf"))
@@ -186,12 +187,12 @@ def Final_A():
             pyautogui.press('enter')
             pyautogui.press('enter')
             pyautogui.press('enter')
-            pyautogui.press('enter')
-
             time.sleep(3)
             pyautogui.typewrite(name)
             pyautogui.press('enter')
-            time.sleep(2)
+            pyautogui.press('enter')
+            pyautogui.press('enter')
+            #time.sleep(2)
             print("Done")
             #time.sleep()
 
@@ -232,8 +233,111 @@ def Final_A():
             #os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" +"Order No " + str(int(EXCELORDERNO)))
             #converter.convert(p,"D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Index Results.pdf')
             df.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(EXCELORDERNO))+'\\Index Results.xlsx', index=False)
-            #converter.convert(driver.current_url, "D:\Title_Files\Output\COOK_COUNTY\Order No"+ str(int(EXCELORDERNO))+"\APN Results.pdf")
 
+            b = driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/form/div[3]/div[1]/div/span').text
+            print(b)
+            z = 1
+            Mortgage = 0
+            Deed = 0
+            Trustee_Deed=0
+
+            while z <= int(b):
+
+                a = driver.find_element(By.XPATH, '//table//tr[' + str(int(z)) + ']//td[6]').text
+                print(a)
+                if Mortgage < 1:
+                    if a == 'MORTGAGE':
+                        c = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/form/div[3]/div[4]/table/tbody/tr[' + str(
+                                                    z) + ']/td[2]/a').get_attribute('href')
+
+                        driver.get(c)
+                        e = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
+                            'href')
+                        r = requests.get(e, stream=True)
+                        with open(
+                                'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                + '\\Mortgage.pdf', 'wb') as fd:
+                            for chunk in r.iter_content(chunk_size=20):
+                                fd.write(chunk)
+                        driver.back()
+                        print(c)
+
+                        Mortgage = Mortgage + 1
+
+                if Trustee_Deed < 1:
+                    if a == 'TRUSTEES DEED':
+                        c = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/form/div[3]/div[4]/table/tbody/tr[' + str(
+                                                    z) + ']/td[2]/a').get_attribute('href')
+
+                        driver.get(c)
+                        e = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
+                            'href')
+                        r = requests.get(e, stream=True)
+                        with open(
+                                'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                + '\\Trustees_Deed.pdf', 'wb') as fd:
+                            for chunk in r.iter_content(chunk_size=20):
+                                fd.write(chunk)
+                        driver.back()
+                        print(c)
+
+                        Trustee_Deed=Trustee_Deed+1
+
+
+
+                if Deed < 1:
+
+                     if a == 'WARRANTY DEED':
+
+                        d = driver.find_element(By.XPATH,
+                                                    '/html/body/div[2]/div/div[3]/div/form/div[3]/div[4]/table/tbody/tr[' + str(
+                                                        z) + ']/td[2]/a').get_attribute('href')
+
+                        print(d)
+                        driver.get(d)
+                        f = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
+                            'href')
+                        r = requests.get(f, stream=True)
+                        with open(
+                                'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                + '\\Deed.pdf', 'wb') as fd:
+                            for chunk in r.iter_content(chunk_size=20):
+                                fd.write(chunk)
+                        driver.back()
+                        Deed = Deed + 1
+
+                if a == 'DEED':
+
+                        d = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/form/div[3]/div[4]/table/tbody/tr[' + str(
+                                                    z) + ']/td[2]/a').get_attribute('href')
+
+                        print(d)
+                        driver.get(d)
+                        f = driver.find_element(By.XPATH,
+                                                '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
+                            'href')
+                        r = requests.get(f, stream=True)
+                        with open(
+                                'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                + '\\Deed.pdf', 'wb') as fd:
+                            for chunk in r.iter_content(chunk_size=20):
+                                fd.write(chunk)
+                        driver.back()
+                        Deed = Deed + 1
+
+                z=z+1
+
+
+if __name__ == '__main__':
+    Final_A()
+            #converter.convert(driver.current_url, "D:\Title_Files\Output\COOK_COUNTY\Order No"+ str(int(EXCELORDERNO))+"\APN Results.pdf")
+''''
             while k < int(COunt):
                 try:
                     # if k < int(COunt):
@@ -307,3 +411,4 @@ def Final_A():
 
 if __name__=='__main__':
     Final_A()
+'''

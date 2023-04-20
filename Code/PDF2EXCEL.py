@@ -51,17 +51,30 @@ for path in pdf_path:
 
 
   for index, row in df.iterrows():
-        order_number_match=re.search(r'Order Number:\s*(\d{7}-\d+)',row["0"])
-        order_number_county = re.search(r'County: \w+\s?\w+', row["0"])
-        order_Borrower = re.search(r'(\w+?\s?\w+?\s?\w+\s*)(?= Borrower|BORROWER)', row["0"])
+        order_number_match=re.search(r'Order Number:\s*(\d{7}-\s?\d+)',row["0"])
+
+        order_number_county = re.search(r'County:\s*\w+\s?\w+', row["0"])
+        order_Borrower = re.search(r'((\w+?\s?\w+?\s?\w+\s*)(?=Borrower|BORROWER)|((?<=BORROWER)\s*\w+\s*\w+))', row["0"])
+
         order_Address=re.search(r'Address:\s*(.*)',row["0"])
 
         if re.search(r'PIN/APN:\s*(.*)', row["0"]):
-         order_APN = re.search(r' PIN/APN:\s*(.*)', row["0"])
-         if re.search(r'PIN/APN:\s*(.*)', row["0"]):
-             APN.append(order_APN.group(1))
-         APN_NUMBER = (APN[0].split(' ')[2])
+
+         order_APN = re.search(r'PIN/APN:\s*(.*)', row["0"]) #PIN/APN :
+         APN.append(order_APN.group(1))
+         print(APN)
+         APN_NUMBER = (APN[0].split(' ')[2]) # APN_NUMBER = (APN[0].split(' ')[2])
+         print(APN_NUMBER)
          worksheet['B' + str(int(i + 2))] = APN_NUMBER
+
+        if re.search(r'PIN/APN :\s*(.*)', row["0"]):
+
+             order_APN = re.search(r'PIN/APN :\s*(.*)', row["0"])  # PIN/APN :
+             APN.append(order_APN.group(1))
+
+             APN_NUMBER = (APN[0].split(' ')[1])  # APN_NUMBER = (APN[0].split(' ')[2])
+             print(APN_NUMBER)
+             worksheet['B' + str(int(i + 2))] = APN_NUMBER
 
         if order_number_match:
          order_numbers.append(order_number_match.group(1))
@@ -76,19 +89,19 @@ for path in pdf_path:
          Address.append(order_Address.group(0))
 
 
-        #if re.search(r'PIN/APN:\s*(.*)', row["0"]):
-         #APN.append(order_APN.group(1))
-
 
   ORDER_NUMBER=(order_numbers[0])
   COUNTY=(County[0].strip('County:'))#[2])#.strip('County:'))
-  BORROWER_NAME=(Borrower[0])
+
+  print(COUNTY)
+
+  print(ORDER_NUMBER)
+
+  BORROWER_NAME=(Borrower[0])#.strip("BORROWER"))
+  print(BORROWER_NAME)
+
   ADDRESS=(Address[0].strip('Address:'))
 
-  #if re.search(r'PIN/APN:\s*(.*)', row["0"]):
-  #APN_NUMBER=(APN[0].split(' ')[2])
-  #print(APN_NUMBER)
-  print("")
 
 
   worksheet['A' + str(int(i + 2))] = ORDER_NUMBER
@@ -99,6 +112,7 @@ for path in pdf_path:
   #worksheet['E' + str(int(i + 2))] = APN_NUMBER
   workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
   i=i+1
+
 
 
 
