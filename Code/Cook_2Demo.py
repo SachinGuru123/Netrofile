@@ -1,7 +1,5 @@
 def Final_A():
 
-    print("HI")
-
     import datetime
     import sys
     import threading
