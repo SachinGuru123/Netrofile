@@ -1,5 +1,6 @@
 import time
 import datetime
+from datetime import timedelta
 import win32com.client
 
 outlook = win32com.client.Dispatch("Outlook.Application")
@@ -15,11 +16,14 @@ for msg in message:
 
     outlook_date = msg.senton.date()
     todays_date = datetime.date.today()
+    #yes=todays_date-timedelta(1)
+    #print(yes)
 
-    if todays_date != outlook_date:
-        break
-    #if len(senders)==200:
+
+    #if todays_date != outlook_date:
         #break
+    if len(senders)==400:
+        break
     sender_name=msg.SenderName
     #sender_name = msg.subject
 

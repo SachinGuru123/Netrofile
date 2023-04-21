@@ -15,7 +15,8 @@ worksheet = workbook.active
 
 i=0
 for path in pdf_path:
-    #print(path)
+  #print(path)
+
 
   pdf_file=open(path,'rb')
   pdf_reader=PyPDF2.PdfReader(pdf_file)
