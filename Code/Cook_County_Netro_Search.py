@@ -154,12 +154,12 @@ def Final_A():
             chrome_options.add_argument('--disable-extensions')
 
             driver = webdriver.Chrome(options=chrome_options)
-            ##################################################
+
 
 
             driver.maximize_window()
             driver.get('https://crs.cookcountyclerkil.gov/Search/Additional')
-            driver.maximize_window()
+            #driver.maximize_window()
             time.sleep(2)
             driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/div/div[3]/div[2]/h2/button').click()
             time.sleep(3)
