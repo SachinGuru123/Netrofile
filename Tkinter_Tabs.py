@@ -20,13 +20,25 @@ import glob
 import re
 import PyPDF2
 from tkinter import ttk
+import glob
+
+
 
 def B():
     messege_lable1 = tkinter.Label(lable2, text="Processing........", font=('Ariel', 12), fg='green', bg='white')
-    messege_lable1.place(x=145, y=45)
+    messege_lable1.place(x=445, y=45)
+
+    input_ID=Sender_Name.get()
+    print(input_ID)
+    #input()
+
+
     Code.Outlook_Automation_Files_Extraction.Final_B()
+
+
     messege_lable1 = tkinter.Label(lable2, text="completed           ", font=('Ariel', 12), fg='green', bg='white')
     messege_lable1.place(x=145, y=45)
+
 
 def C():
     messege_lable2 = tkinter.Label(lable2, text="Processing........", font=('Ariel', 12), fg='green', bg='white')
@@ -116,11 +128,36 @@ image2 = Image.open("D:\\Title_Files\\Images\\outlook-featured-2100x1200.jpg")
 photo2 = ImageTk.PhotoImage(image2)
 lable2 = tkinter.Label(frame2, image=photo2)
 
-Start_button2 = tkinter.Button(frame2, text="Outlook Mails Extraction", command=lambda: threading.Thread(target=B).start(), font=('Ariel', 13), bg="green", fg='black')
-Start_button2.place(x=245,y=85,height=35, width=450)
+Start_button2 = tkinter.Button(frame2, text="Outlook Mails Extraction", command=lambda: threading.Thread(target=B).start(), font=('Ariel', 13), bg="lightgreen", fg='black')
+Start_button2.place(x=360,y=85,height=35, width=450)
 
-Start_button3 = tkinter.Button(frame2, text="Outlook Mails Sender", command=lambda: threading.Thread(target=C).start(), font=('Ariel', 13), bg="green", fg='black')
-Start_button3.place(x=245,y=500,height=35, width=450)
+Start_button3 = tkinter.Button(frame2, text="Outlook Mails Sender", command=lambda: threading.Thread(target=C).start(), font=('Ariel', 13), bg="lightgreen", fg='black')
+Start_button3.place(x=360,y=500,height=35, width=450)
+
+
+Sender_Name=tkinter.Entry(frame2,bg='lightyellow',fg='black')  #show='*'
+Sender_Name.place(x=200,y=10,height=22,width=150)
+
+
+Sender_lable1=tkinter.Label(frame2,text="Enter the Outlook ID",font=('Ariel', 11),fg='green',bg='white')
+Sender_lable1.place(x=0,y=10,height=25,width=200)
+
+DocType_lable1=tkinter.Label(frame2,text="Document Type",font=('Ariel', 11),fg='green',bg='white')
+DocType_lable1.place(x=0,y=45,height=25,width=200)
+
+Doc_Types=['.pdf','.txt','.png','.zip','All']
+selected_option=tkinter.StringVar()
+
+selected_option.set(Doc_Types[0])
+dropdown=ttk.Combobox(frame2,values=Doc_Types,textvariable=selected_option,foreground='grey63',font=('Ariel', 13))
+dropdown.place(x=200,y=45,height=25,width=150)
+
+Sender_Date1=tkinter.Label(frame2,text="Enter Date in dd/mm/yyyy",font=('Ariel', 11),fg='green',bg='white')
+Sender_Date1.place(x=0,y=90,height=25,width=200)
+
+Sender_Date=tkinter.Entry(frame2,bg='lightyellow',fg='black')  #show='*'
+Sender_Date.place(x=200,y=90,height=22,width=150)
+
 
 
 

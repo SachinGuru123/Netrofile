@@ -187,8 +187,9 @@ def Final_A():
             pyautogui.press('enter')
             pyautogui.press('enter')
             pyautogui.press('enter')
-
             time.sleep(3)
+            pyautogui.press('enter')
+            pyautogui.press('enter')
             pyautogui.typewrite(name)
             pyautogui.press('enter')
             time.sleep(2)
