@@ -27,7 +27,7 @@ def Final_B(ORDERN,F,L):
     chrome_options.add_argument('--disable-extensions')
     chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
     driver = webdriver.Chrome(options=chrome_options)
-    time.sleep(2)
+    driver.maximize_window()
     driver.get('https://mytax.illinois.gov/?link=TaxLienReg')
     driver.maximize_window()
 

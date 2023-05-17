@@ -54,8 +54,9 @@ for i in range(E):
     chrome_options.add_argument('--kiosk-printing')
     chrome_options.add_argument('--disable-extensions')
 
-    driver = webdriver.Chrome(options=chrome_options)
 
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.maximize_window()
     driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
     driver.maximize_window()
 
@@ -107,9 +108,10 @@ for i in range(E):
         time.sleep(4)
         driver.close()
 
-        New_update1_title.Final_A()
+        New_update1_title.Final_A(i)
 
         Lien_Report.Final_B(ORDERN,F,L)
+
 
         BRB_Search.Final_C(ORDERN,F,L)
 
@@ -167,16 +169,7 @@ for i in range(E):
         combinedfile = 'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
 
-        '''
 
-        with open('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.txt', 'w') as file:
-
-            for row in sheet.iter_rows():
-                for cell in row:
-                    file.write((str(cell.value)) + '\t')
-
-                file.write('\n')
-        '''
 
 
 

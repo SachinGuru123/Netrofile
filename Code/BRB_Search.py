@@ -37,7 +37,6 @@ def  Final_C(ORDERN,F,L):
     path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
 
     name = "BRB Search"
-    pyautogui.FAILSAFE = True
     time.sleep(3)
     pyautogui.typewrite(path + '\\' + name + '.pdf')
     time.sleep(3)

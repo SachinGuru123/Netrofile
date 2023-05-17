@@ -1,4 +1,4 @@
-def Final_A():
+def Final_A(i):
     import datetime
     import sys
     import threading
@@ -37,6 +37,7 @@ def Final_A():
     from selenium.webdriver.support import expected_conditions as EC
     from bs4 import BeautifulSoup
     from datetime import datetime
+    import math
 
     dataframe1 = pd.read_excel(
         'D:\\Title_Files\\Input\\Cook_county.xlsx')
@@ -45,9 +46,9 @@ def Final_A():
     E = dataframe1[dataframe1.columns[0]].count()
     print(dataframe1['County Name'][0])
 
-    for i in range(E):
 
-        if dataframe1['County Name'][i]== ('Cook'):
+
+    if dataframe1['County Name'][i]== ('Cook'):
 
             EXCELAPN = str(dataframe1['APN'][i])  # .replace("-",''))
             print(EXCELAPN)
@@ -142,10 +143,10 @@ def Final_A():
                                                 '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr[' + str(
                                                     k) + ']/td[2]/a')) == True:
                         print("A2")
+
                         hr=driver.find_element(By.XPATH,
                                                  '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr[' + str(
                                                     k) + ']/td[2]/a').get_attribute("href")
-
                         print("A3")
                         driver.get(hr)
                         #WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,'/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[1]/div[1]/table/tbody/tr[1]/td')))
@@ -187,7 +188,7 @@ def Final_A():
                     print("A")
                     driver.back()
 
-            #end_time = datetime.datetime.now()
+
 
             workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
 
@@ -203,6 +204,7 @@ def Final_A():
 
             df2 = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\Name Results.xlsx')
             lastdate=(df2['Doc Recorded'].iloc[-1])
+
 
 
             data_frame = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\APN Results.xlsx')
@@ -303,16 +305,20 @@ def Final_A():
                 except Exception as Err:
                     # print(Err)
                     M += 1
-                    #driver.back()
+                    driver.back()
             print("APN SITE COMPLETED")
 
             #############################################Second Name###################
 
-            SecondName = dataframe1['Second Name'][i]
 
-
-            if SecondName is None:
+            workbook = openpyxl.load_workbook('D:\Title_Files\Input\Cook_county.xlsx')
+            sheet = workbook.active
+            cell_value = sheet['I2'].value
+            print(cell_value)
+            input()
+            if cell_value is  None:
                 print("Second name not Exist")
+
 
             else:
 
@@ -323,7 +329,7 @@ def Final_A():
                 # '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').clear()
                 driver.find_element(By.XPATH,
                                     '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').send_keys(
-                    SecondName, Keys.ENTER)
+                    cell_value, Keys.ENTER)
 
                 z = driver.find_element(By.XPATH, '//*[@id="result"]/div[1]/div/span[1]').text
                 z = (z.replace(",", ""))
@@ -333,9 +339,7 @@ def Final_A():
 
                 Cnumber=driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span[1]').text
                 print(Cnumber)
-                CC=int(Cnumber)/100
-                roundoff =round(CC)
-                print(roundoff)
+
 
                 if total >= int(100):
                     qq = driver.find_element(By.XPATH, '//*[@id="Paging"]/div/ul/li[2]/a').get_attribute("href")
@@ -353,6 +357,10 @@ def Final_A():
                     df1 = pd.DataFrame()
                     j = 1
 
+                    CC = int(Cnumber) / 100
+                    roundoff = round(CC)
+                    print(roundoff)
+
                     while int(j) <= int(roundoff):
                         Np = soup.find("a", rel='next').get("href")
                         cnp = "https://crs.cookcountyclerkil.gov" + Np
@@ -364,14 +372,15 @@ def Final_A():
                         updated = updated + str(j)
                         # print(updated)
 
-                        max_retry = 3
+                        max_retry = 2
                         retry_count = 0
                         while retry_count < max_retry:
                             try:
                                 r = requests.get(updated)  # verify=False
                                 # print(r.content)
                                 print(updated)
-                                retry_count += 1
+                                break
+                                #retry_count += 1
 
                             except Exception as e:
                                 retry_count += 1
@@ -459,11 +468,12 @@ def Final_A():
             Cnumber1 = driver.find_element(By.XPATH,
                                           '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span[1]').text
             print(Cnumber1)
-            CC = int(Cnumber1) / 100
-            roundoff1 = round(CC)
-            print(roundoff1)
+
 
             if total >= int(100):
+             CC = int(total) / 100
+             roundoff1 = round(CC)
+             print(roundoff1)
              qq = driver.find_element(By.XPATH, '//*[@id="Paging"]/div/ul/li[2]/a').get_attribute("href")
              qq = qq[:len(qq) - 1]
              print(qq)
@@ -473,13 +483,13 @@ def Final_A():
              df1 = df1._append(df)
              time.sleep(3)
              r = requests.get(qq)
-             time.sleep(3)
+             time.sleep(2)
              soup = BeautifulSoup(r.text, 'lxml')
 
              df1 = pd.DataFrame()
              j = 1
 
-             while int(j) < int(roundoff):
+             while int(j) < int(roundoff1):
                 Np = soup.find("a", rel='next').get("href")
                 cnp = "https://crs.cookcountyclerkil.gov" + Np
                 url = cnp
@@ -504,7 +514,9 @@ def Final_A():
 
                 soup = BeautifulSoup(r.content, 'html.parser')
                 table = soup.find('table')
+                time.sleep(2)
                 df = pd.read_html(str(table))[0]
+                time.sleep(1)
                 # print(df)
                 df1 = df1._append(df)
                 print(df1)
