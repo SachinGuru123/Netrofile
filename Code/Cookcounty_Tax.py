@@ -22,7 +22,7 @@ def Final_UI():
 
  dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
 
- input()
+
 
  E = dataframe1[dataframe1.columns[0]].count()
 
@@ -104,7 +104,7 @@ def Final_UI():
         worksheet['B' + str(int(i+2))] = aaa
         #worksheet['B' + str(int(i+2))] = aaa
 
-        input()
+
         workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
 
 
