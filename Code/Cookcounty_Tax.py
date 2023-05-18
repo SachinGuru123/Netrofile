@@ -19,8 +19,9 @@ def Final_UI():
  import Code.BRB_Search
  import os
 
-
- dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
+ # par_dir=os.path.dirname(os.getcwd())
+ # print(par_dir)
+ dataframe1 = pd.read_excel('Input\\Cook_county.xlsx',engine='openpyxl')
 
 
 
@@ -60,7 +61,7 @@ def Final_UI():
     chrome_options.add_argument('--disable-extensions')
 
 
-    driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome("chromedriver_win32/chromedriver.exe",options=chrome_options)
     time.sleep(4)
     driver.maximize_window()
     driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
@@ -68,13 +69,17 @@ def Final_UI():
 
     elem = WebDriverWait(driver, 15).until(
     EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
-
+    time.sleep(2)
     driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[1]/div/ul/li[2]/div/ul/li[3]').click()
+    time.sleep(2)
     elem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
+    time.sleep(2)
     driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtStreetName"]').send_keys(STREETNAME)
+    time.sleep(1)
     driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtHouseNumber"]').send_keys(HOUSENUMBER)
+    time.sleep(1)
     driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[11]/input').send_keys(PIN)
-
+    time.sleep(1)
     driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[9]/div[1]/input').send_keys(City,Keys.ENTER)
 
     try:
@@ -91,26 +96,27 @@ def Final_UI():
 
         #WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH,'/ html / body / form / div[4] / div[2] / div / div / div[3] / div / div / div[2] / div[1] / span'))) ==True:
         driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[3]/a').click()
-        aaa=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text
-        print(aaa)
+        text=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text
+        print(text)
 
-        os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
+        os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
 
-        workbook = openpyxl.load_workbook('D:\\Title_Files\\Input\\Cook_county.xlsx')
+
+        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
 
 
         worksheet = workbook.active
+        #print("access to excel sheet")
+        worksheet['B' + str(int(i+2))] = text
+        #worksheet['B' + str(int(i+2))] = text
 
-        worksheet['B' + str(int(i+2))] = aaa
-        #worksheet['B' + str(int(i+2))] = aaa
 
-
-        workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
-
+        workbook.save('Input\\Cook_county.xlsx')
+        print("saving ")
 
         driver.execute_script('window.print();')
         time.sleep(3)
-        path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+        path=os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
         name="Tax Sheet"
         pyautogui.FAILSAFE = False
         pyautogui.typewrite(path +'\\'+ name + '.pdf')
@@ -139,8 +145,12 @@ def Final_UI():
         sheet['A8'] = 'NAMES RUN:'
         sheet['A9'] = '###################################################################################'
         #sheet['A10']='DOC ID '
+        print("reading excel sheet")
+        df = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine="openpyxl")
 
-        df = pd.read_excel('D:\Title_Files\Input\Cook_county.xlsx')
+
+        print(df['Order No'])
+        #print("value of i is "+str(i))
         Ordernumber = df['Order No'][i]
         print(Ordernumber)
         BORROWERNAME = df['NAME'][i]
@@ -168,33 +178,29 @@ def Final_UI():
         #sheet['C10']='INST NO'
         #sheet['D10']='BOOK-PAGE '
 
-        workbook1.save('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx')
+        workbook1.save(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx')
 
-        df1 = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx')
+        df1 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
         f = df1[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
         #print(f)
 
-        df2 = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx')
+        df2 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
 
-        df_combined = df2._append(f)
-        combinedfile = 'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
+        df_combined = df2.append(f)
+        combinedfile = 'Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
-
-
-
-
 
 
     except:
         print("Mailing address is not matching")
         try:
-            os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
+            os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         except Exception:
             print("Error")
-        workbook = openpyxl.load_workbook('D:\\Title_Files\\Input\\Cook_county.xlsx')
+        workbook = openpyxl.load_workbook('Input\\Cook_county.xlsx')
         worksheet = workbook.active
         worksheet['B' + str(int(i + 2))]='APN not Found'
-        workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
+        workbook.save('Input\\Cook_county.xlsx')
         driver.close()
         print("Closed")
 

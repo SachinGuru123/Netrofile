@@ -34,7 +34,7 @@ def  Final_C(ORDERN,F,L):
 
     driver.execute_script('window.print();')
 
-    path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+    path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
 
     name = "BRB Search"
     time.sleep(3)

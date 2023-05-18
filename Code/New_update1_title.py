@@ -40,8 +40,7 @@ def Final_A(i):
     from datetime import datetime
     import math
 
-    dataframe1 = pd.read_excel(
-        'D:\\Title_Files\\Input\\Cook_county.xlsx')
+    dataframe1 = pd.read_excel('Input\\Cook_county.xlsx')
 
 
     E = dataframe1[dataframe1.columns[0]].count()
@@ -65,9 +64,9 @@ def Final_A(i):
             print(EXCELORDERNO)
 
             # order number is created
-            # os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)))
+            # os.makedirs("Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)))
 
-            chrome_driver = 'D:\chromedriver_win32 (5)\chromedriver.exe'
+            chrome_driver = 'chromedriver_win32\chromedriver.exe'
 
             chrome_options = Options()
             chrome_options.add_argument('--kiosk-printing')
@@ -91,11 +90,11 @@ def Final_A(i):
 
             aq=driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form[1]/div[2]/div/div[2]').text
 
-            workbook = openpyxl.load_workbook('D:\\Title_Files\\Input\\Cook_county.xlsx')
+            workbook = openpyxl.load_workbook('Input\\Cook_county.xlsx')
             worksheet = workbook.active
             GIT=aq.split("|")[0]
             worksheet['H' + str(int(i + 2))] =GIT
-            workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
+            workbook.save('Input\\Cook_county.xlsx')
 
             # converter.convert(driver., "D:\Title_Files\PN Results.pdf")
             a = driver.find_element(By.XPATH, '//table')
@@ -104,9 +103,10 @@ def Final_A(i):
 
             # to take print of Index Value
             driver.execute_script('window.print();')
+            time.sleep(5)
 
 
-            path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
+            path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
             time.sleep(3)
             name = "Name Index"
             pyautogui.FAILSAFE = False
@@ -126,14 +126,14 @@ def Final_A(i):
             print(COunt)
 
             workbook = openpyxl.load_workbook(
-                'D:\\Title_Files\\Input\\Cook_county.xlsx')
+                'Input\\Cook_county.xlsx')
             worksheet = workbook.active
             #start_time = datetime.datetime.now()
             #worksheet['F' + str(int(i + 2))] = start_time
             k = 1
 
             df.to_excel(
-                "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx',
+                os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx',
                 index=False)
 
             print(COunt)
@@ -164,7 +164,7 @@ def Final_A(i):
                             r = requests.get(url)
                             print(r.status_code)
                             with open(
-                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                    'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
                                     + '\\Doc' + str(k) + '   ' + str(d) + '.pdf', 'wb') as fd:
                                 for chunk in r.iter_content(chunk_size=2000):
                                     fd.write(chunk)
@@ -175,7 +175,7 @@ def Final_A(i):
                             r = requests.get(url)
                             print(r.status_code)
                             with open(
-                                    'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                    'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
                                     + '\\Doc' + str(k) + '   ' + str(d) + '.pdf', 'wb') as fd:
                                 for chunk in r.iter_content(chunk_size=2000):
                                     fd.write(chunk)
@@ -191,7 +191,7 @@ def Final_A(i):
 
 
 
-            workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
+            workbook.save('Input\\Cook_county.xlsx')
 
             driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/form[1]/div[2]/div/div[1]/input').clear()
             driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/form[1]/div[2]/div/div[1]/input').send_keys(
@@ -200,26 +200,26 @@ def Final_A(i):
             aa = driver.find_element(By.XPATH, '//table')
             df1 = pd.read_html(aa.get_attribute('outerHTML'))[0]
             df1.to_excel(
-                "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\APN Results.xlsx',
+                "Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\APN Results.xlsx',
                 index=False)
 
-            df2 = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\Name Results.xlsx')
+            df2 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\Name Results.xlsx')
             lastdate=(df2['Doc Recorded'].iloc[-1])
 
 
 
-            data_frame = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\APN Results.xlsx')
+            data_frame = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\APN Results.xlsx')
 
             data_frame['Doc Recorded'] = pd.to_datetime(data_frame['Doc Recorded'], format='%m/%d/%Y')
 
             filterd_data = data_frame[data_frame['Doc Recorded'] >= lastdate]
 
             filterd_data.to_excel(
-                "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))+"\\filterd_data.xlsx",
+                "Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))+"\\filterd_data.xlsx",
                 index=False)
 
-            df2 = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\Name Results.xlsx')
-            df3 = pd.read_excel('D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\filterd_data.xlsx')
+            df2 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\Name Results.xlsx')
+            df3 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))+'\\filterd_data.xlsx')
 
             col1 = df2['Doc Number']
             col2 = df3['Doc Number']
@@ -244,7 +244,7 @@ def Final_A(i):
             driver.execute_script('window.print();')
             time.sleep(4)
             print(Total_files_No)
-            path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
+            path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
             name = "ParcelNumber_index"
             time.sleep(1)
             pyautogui.typewrite(path + '\\' + name + '.pdf')
@@ -287,7 +287,7 @@ def Final_A(i):
                                 url = F
                                 respnse = requests.get(url)
                                 with open(
-                                        'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                        'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
                                         + '\\APN Doc' +" "+ str(qq) + " " + '.pdf', 'wb') as f:
                                     f.write(respnse.content)
 
@@ -295,7 +295,7 @@ def Final_A(i):
                                 url = F
                                 respnse = requests.get(url)
                                 with open(
-                                        'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                                        'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
                                         + '\\APN Doc' +" "+ str(qq) + " " + '.pdf', 'wb') as f:
                                     f.write(respnse.content)
 
@@ -312,7 +312,7 @@ def Final_A(i):
             #############################################Second Name###################
 
 
-            workbook = openpyxl.load_workbook('D:\Title_Files\Input\Cook_county.xlsx')
+            workbook = openpyxl.load_workbook('Input\Cook_county.xlsx')
             sheet = workbook.active
 
             cell_value = sheet['I'+str(i+2)].value
@@ -350,7 +350,7 @@ def Final_A(i):
                     time.sleep(2)
                     a = driver.find_element(By.XPATH, '//table')
                     df = pd.read_html(a.get_attribute('outerHTML'))[0]
-                    df1 = df1._append(df)
+                    df1 = df1.append(df)
                     time.sleep(3)
                     r = requests.get(qq)
                     time.sleep(3)
@@ -392,17 +392,17 @@ def Final_A(i):
                         table = soup.find('table')
                         df = pd.read_html(str(table))[0]
                         # print(df)
-                        df1 = df1._append(df)
+                        df1 = df1.append(df)
                         print(df1)
 
                         j += 1
                         # print(j)
 
                     # df1.to_excel('D:\Title_Files\Output\COOK_COUNTY\Order No 1192237\c.xlsx', index=False)  # index=False
-                    df1.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(
+                    df1.to_excel("Output\\COOK_COUNTY\\" + "Order No " + str(
                         EXCELORDERNO) + '\\DataExtraction1.xlsx', index=False)
 
-                    df = pd.read_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(
+                    df = pd.read_excel("Output\\COOK_COUNTY\\" + "Order No " + str(
                         EXCELORDERNO) + '\\DataExtraction1.xlsx')
 
                     df['APN Number'] = df['1st PIN'].str.split(' ').str[0]
@@ -427,7 +427,7 @@ def Final_A(i):
                         driver.execute_script('window.print();')
                         time.sleep(5)
                         pyautogui.press('enter')
-                        path = 'D:\\Title_Files\\Output\\COOK_COUNTY\\' + "Order No " + str(
+                        path = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(
                             int(EXCELORDERNO)) + '\\secondName Search' + str(l) + '.pdf'
                         pyautogui.typewrite(path)
 
@@ -439,7 +439,7 @@ def Final_A(i):
                     print("Docs IS LESS Than 1OO")
                     driver.execute_script('window.print();')
                     time.sleep(5)
-                    path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
+                    path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
                     name = "Full_Name_search_Index2"
                     #pyautogui.FAILSAFE = False
                     pyautogui.typewrite(path + '\\' + name + '.pdf')
@@ -481,7 +481,9 @@ def Final_A(i):
              time.sleep(2)
              a = driver.find_element(By.XPATH, '//table')
              df = pd.read_html(a.get_attribute('outerHTML'))[0]
-             df1 = df1._append(df)
+             print(df)
+             df1 = df1.append(df)
+             df1= df1.append(df)
 
              r = requests.get(qq)
              time.sleep(2)
@@ -526,7 +528,7 @@ def Final_A(i):
                 df = pd.read_html(str(table))[0]
                 time.sleep(1)
                 # print(df)
-                df1 = df1._append(df)
+                df1 = df1.append(df)
                 print(df1)
 
                 j += 1
@@ -534,9 +536,9 @@ def Final_A(i):
 
 
              #df1.to_excel('D:\Title_Files\Output\COOK_COUNTY\Order No 1192237\c.xlsx', index=False)  # index=False
-             df1.to_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)+'\\DataExtraction.xlsx',index=False)
+             df1.to_excel("Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)+'\\DataExtraction.xlsx',index=False)
 
-             df = pd.read_excel("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)+'\\DataExtraction.xlsx')
+             df = pd.read_excel("Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)+'\\DataExtraction.xlsx',engine='openpyxl')
 
 
              df['APN Number'] = df['1st PIN'].str.split(' ').str[0]
@@ -561,7 +563,7 @@ def Final_A(i):
                 driver.execute_script('window.print();')
                 time.sleep(5)
                 pyautogui.press('enter')
-                path = 'D:\\Title_Files\\Output\\COOK_COUNTY\\'+"Order No "+ str(int(EXCELORDERNO))+'\\Name Search' + str(l) + '.pdf'
+                path = os.getcwd()+'\\Output\\COOK_COUNTY\\'+"Order No "+ str(int(EXCELORDERNO))+'\\Name Search' + str(l) + '.pdf'
                 pyautogui.typewrite(path)
 
                 pyautogui.press('enter')
@@ -572,7 +574,7 @@ def Final_A(i):
                 print("Docs IS LESS Than 1OO")
                 driver.execute_script('window.print();')
                 time.sleep(5)
-                path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
+                path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
                 name = "Full_Name_search_Index"
                 pyautogui.FAILSAFE = False
                 pyautogui.typewrite(path + '\\' + name + '.pdf')

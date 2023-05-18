@@ -19,6 +19,7 @@ import PyPDF2
 import Code.New_update1_title
 import Code.Lien_Report
 import Code.BRB_Search
+import Code.Cookcounty_Tax as cook
 import os
 
 
@@ -27,18 +28,16 @@ def Close():
     w.destroy()
 
 def click():
-    Code.Cookcounty_Tax.Final_UI()
+    cook.Final_UI()
 
 
-
-par_dir = os.getcwd()
 w=Tk()
 w.title("Netro_Smartsearch")
 w.geometry('1700x1200')
 
 #image = Image.open("D:\\Title_Files\\Images\\Coforge_Logo.jpg")
-image = Image.open(par_dir+"\\Images\\Coforge_Logo.jpg")
-dirpath=os.getcwd()
+image = Image.open("Images\\Coforge_Logo.jpg")
+#dirpath=os.getcwd()
 
 
 
@@ -48,7 +47,7 @@ photo = ImageTk.PhotoImage(image)
 lable = tkinter.Label(w, image=photo)
 
 #w.iconbitmap("D:\\Title_Files\\Images\\RGBA.ico")
-w.iconbitmap(par_dir+"\\Images\\RGBA.ico")
+w.iconbitmap("Images\\RGBA.ico")
 
 
 Start_button = tkinter.Button(w, text="Start", command=lambda: threading.Thread(target=click).start(), font=('Ariel', 13), bg="lightblue", fg='black')

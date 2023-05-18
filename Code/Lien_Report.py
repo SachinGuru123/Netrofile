@@ -13,7 +13,7 @@ def Final_B(ORDERN,F,L):
     import glob
     import re,PyPDF2
 
-    dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
+    dataframe1 = pd.read_excel('Input\\Cook_county.xlsx')
     EXCELADDRESS = str(dataframe1['NAME'][0].replace("-",''))
     Firstname=(EXCELADDRESS.split()[0:1])
     Lastname=(EXCELADDRESS.split()[-1])
@@ -26,7 +26,7 @@ def Final_B(ORDERN,F,L):
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
     chrome_options.add_argument('--disable-extensions')
-    chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
+    #chrome_driver = 'D:\chromedriver_win32\chromedriver.exe'
     driver = webdriver.Chrome(options=chrome_options)
     driver.maximize_window()
     driver.get('https://mytax.illinois.gov/?link=TaxLienReg')
@@ -57,7 +57,7 @@ def Final_B(ORDERN,F,L):
 
     driver.execute_script('window.print();')
 
-    path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+    path=os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
 
     name="Lien_Report"
     time.sleep(3)
