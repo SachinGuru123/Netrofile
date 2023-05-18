@@ -313,9 +313,10 @@ def Final_A(i):
 
             workbook = openpyxl.load_workbook('D:\Title_Files\Input\Cook_county.xlsx')
             sheet = workbook.active
-            cell_value = sheet['I2'].value
+
+            cell_value = sheet['I'+str(i+2)].value
             print(cell_value)
-            input()
+
             if cell_value is  None:
                 print("Second name not Exist")
 
@@ -438,17 +439,17 @@ def Final_A(i):
                     time.sleep(5)
                     path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
                     name = "Full_Name_search_Index2"
-                    pyautogui.FAILSAFE = False
+                    #pyautogui.FAILSAFE = False
                     pyautogui.typewrite(path + '\\' + name + '.pdf')
                     time.sleep(2)
                     pyautogui.press('enter')
-                    time.sleep(6)
-                    driver.close()
+                    time.sleep(4)
+                    #driver.close()
 
             print("Second completd")
 
             ###################################################
-
+            time.sleep(4)
             driver.get('https://crs.cookcountyclerkil.gov/Search')
             time.sleep(5)
 

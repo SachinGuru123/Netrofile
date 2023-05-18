@@ -22,6 +22,7 @@ def Final_B(ORDERN,F,L):
     print(Firstname)
     County='CooK'
 
+
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
     chrome_options.add_argument('--disable-extensions')
@@ -53,6 +54,7 @@ def Final_B(ORDERN,F,L):
     elem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH,'/html/body/div[2]/div/div[1]/div/div/main/div/div/div[2]/div[2]/form/div[1]/div/div[1]/div[1]/table/tbody/tr[2]/td/div/div/div/h3')))
 
     time.sleep(8)
+
     driver.execute_script('window.print();')
 
     path="D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
@@ -62,6 +64,7 @@ def Final_B(ORDERN,F,L):
     pyautogui.typewrite(path +'\\'+ name + '.pdf')
     pyautogui.press('enter')
     time.sleep(5)
+
     driver.close()
 if __name__ == '__main__':
     Final_B()
