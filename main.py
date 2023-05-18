@@ -19,8 +19,9 @@ import PyPDF2
 import Code.New_update1_title
 import Code.Lien_Report
 import Code.BRB_Search
-
 import os
+
+
 
 def Close():
     w.destroy()
@@ -30,17 +31,26 @@ def click():
 
 
 
-#if __name__=='__main__':
-    #click()
-
+par_dir = os.getcwd()
 w=Tk()
 w.title("Netro_Smartsearch")
 w.geometry('1700x1200')
-image = Image.open("D:\\Title_Files\\Images\\Coforge_Logo.jpg")
+
+#image = Image.open("D:\\Title_Files\\Images\\Coforge_Logo.jpg")
+image = Image.open(par_dir+"\\Images\\Coforge_Logo.jpg")
+dirpath=os.getcwd()
+
+
+
+
 photo = ImageTk.PhotoImage(image)
 
 lable = tkinter.Label(w, image=photo)
-w.iconbitmap("D:\\Title_Files\\Images\\RGBA.ico")
+
+#w.iconbitmap("D:\\Title_Files\\Images\\RGBA.ico")
+w.iconbitmap(par_dir+"\\Images\\RGBA.ico")
+
+
 Start_button = tkinter.Button(w, text="Start", command=lambda: threading.Thread(target=click).start(), font=('Ariel', 13), bg="lightblue", fg='black')
 Start_button.place(x=330,y=160,height=35, width=150)
 close_button=tkinter.Button(w,text="Close",command=Close,font=('Ariel', 13), bg="lightblue", fg='black')

@@ -1,7 +1,9 @@
 
 import os
-a=os.getcwd().replace('Code','')
+dirpath=os.path.dirname(os.getcwd())
+a=os.getcwd()
 print(a)
+print(dirpath)
 
 
 '''

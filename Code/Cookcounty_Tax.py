@@ -17,9 +17,13 @@ def Final_UI():
  import Code.New_update1_title
  import Code.Lien_Report
  import Code.BRB_Search
+ import os
 
 
  dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
+
+ input()
+
  E = dataframe1[dataframe1.columns[0]].count()
 
 
@@ -57,6 +61,7 @@ def Final_UI():
 
 
     driver = webdriver.Chrome(options=chrome_options)
+    time.sleep(4)
     driver.maximize_window()
     driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
     driver.maximize_window()
@@ -92,11 +97,16 @@ def Final_UI():
         os.makedirs("D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
 
         workbook = openpyxl.load_workbook('D:\\Title_Files\\Input\\Cook_county.xlsx')
+
+
         worksheet = workbook.active
 
         worksheet['B' + str(int(i+2))] = aaa
         #worksheet['B' + str(int(i+2))] = aaa
+
+        input()
         workbook.save('D:\\Title_Files\\Input\\Cook_county.xlsx')
+
 
         driver.execute_script('window.print();')
         time.sleep(3)
