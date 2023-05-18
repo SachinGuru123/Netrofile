@@ -1,4 +1,5 @@
 def Final_A(i):
+
     import datetime
     import sys
     import threading
@@ -277,8 +278,7 @@ def Final_A(i):
                                                       '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr['+str(M)+']/td[2]/a').get_attribute('href')
 
                              driver.get(qqq)
-                             #print(qq)
-                             #print(qqq)
+
                              F = driver.find_element(By.XPATH,
                                                     '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
                                 'href')
@@ -300,12 +300,13 @@ def Final_A(i):
                                     f.write(respnse.content)
 
                              driver.back()
+                             time.sleep(2)
+
                         M += 1
 
                 except Exception as Err:
-                    # print(Err)
                     M += 1
-                    driver.back()
+                    #driver.back()
             print("APN SITE COMPLETED")
 
             #############################################Second Name###################
@@ -482,7 +483,7 @@ def Final_A(i):
              a = driver.find_element(By.XPATH, '//table')
              df = pd.read_html(a.get_attribute('outerHTML'))[0]
              df1 = df1._append(df)
-             time.sleep(3)
+
              r = requests.get(qq)
              time.sleep(2)
              soup = BeautifulSoup(r.text, 'lxml')
@@ -496,9 +497,11 @@ def Final_A(i):
                 url = cnp
                 # r = requests.get(url,verify=False)
                 time.sleep(1)
-                updated = url[:-1]
+                #updated = url[:-1]
+                updated=url.rstrip('0123456789')
                 print(j)
-                updated = updated + str(j)
+                #updated = updated + str(j)
+                updated = url.rstrip('0123456789')
                 # print(updated)
 
                 max_retry = 3
@@ -509,13 +512,14 @@ def Final_A(i):
                         # print(r.content)
                         print(updated)
                         retry_count += 1
+                        break
 
                     except Exception as e:
                         retry_count += 1
 
                 soup = BeautifulSoup(r.content, 'html.parser')
                 table = soup.find('table')
-                time.sleep(2)
+                time.sleep(3)
                 df = pd.read_html(str(table))[0]
                 time.sleep(1)
                 # print(df)
