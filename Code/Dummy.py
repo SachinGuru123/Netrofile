@@ -1,4 +1,11 @@
-def Final_B():
+
+import os
+a=os.getcwd().replace('Code','')
+print(a)
+
+
+'''
+ def Final_B():
     from selenium import webdriver
     from selenium.webdriver.chrome.service import Service
     from selenium.webdriver.common.by import By
@@ -67,7 +74,7 @@ def Final_B():
 
 
     time.sleep(8)
-    '''
+   
     driver.execute_script('window.print();')
     path="D:\\Title_Files\\Output\\COOK_COUNTY"
 
@@ -76,7 +83,7 @@ def Final_B():
     pyautogui.typewrite(path +'\\'+ name + '.pdf')
     pyautogui.press('enter')
     time.sleep(5)
-    '''
+   
     a = driver.find_element(By.XPATH, '//tbody')
     df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
@@ -86,4 +93,4 @@ if __name__ == '__main__':
     Final_B()
 
 
-
+'''

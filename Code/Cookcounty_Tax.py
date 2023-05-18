@@ -1,30 +1,31 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-import time
-import pandas as pd
-import shutil, os
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import pyautogui
-import glob
-import re,PyPDF2
-from openpyxl import load_workbook
-import openpyxl
-import New_update1_title
-import Lien_Report
-import BRB_Search
+def Final_UI():
+ from selenium import webdriver
+ from selenium.webdriver.chrome.service import Service
+ from selenium.webdriver.common.by import By
+ from selenium.webdriver.common.keys import Keys
+ import time
+ import pandas as pd
+ import shutil, os
+ from selenium.webdriver.chrome.options import Options
+ from selenium.webdriver.support.ui import WebDriverWait
+ from selenium.webdriver.support import expected_conditions as EC
+ import pyautogui
+ import glob
+ import re,PyPDF2
+ from openpyxl import load_workbook
+ import openpyxl
+ import Code.New_update1_title
+ import Code.Lien_Report
+ import Code.BRB_Search
 
 
-dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
-E = dataframe1[dataframe1.columns[0]].count()
+ dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
+ E = dataframe1[dataframe1.columns[0]].count()
 
 
 
 
-for i in range(E):
+ for i in range(E):
     EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",''))
 
     FName = (dataframe1['NAME'][0])
@@ -108,12 +109,12 @@ for i in range(E):
         time.sleep(4)
         driver.close()
 
-        New_update1_title.Final_A(i)
+        Code.New_update1_title.Final_A(i)
 
-        Lien_Report.Final_B(ORDERN,F,L)
+        Code.Lien_Report.Final_B(ORDERN,F,L)
 
 
-        BRB_Search.Final_C(ORDERN,F,L)
+        Code.BRB_Search.Final_C(ORDERN,F,L)
 
         workbook1 = openpyxl.Workbook()
         sheet = workbook1.active
@@ -188,5 +189,6 @@ for i in range(E):
         print("Closed")
 
 
-
+if __name__ == '__main__':
+    Final_UI()
 

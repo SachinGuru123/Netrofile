@@ -2,7 +2,7 @@ import json
 import os
 import sys
 from PIL import Image, ImageTk
-import Code.Cook_County_Netro_Search
+import Code.Cookcounty_Tax
 from tkinter import Tk
 import tkinter
 from tkinter import ttk
@@ -16,48 +16,18 @@ import threading
 import glob
 import re
 import PyPDF2
+import Code.New_update1_title
+import Code.Lien_Report
+import Code.BRB_Search
 
 
 def Close():
     w.destroy()
 
 def click():
-    count_file = "D:\\Title_Files\\Config\\count.txt"
+    Code.Cookcounty_Tax.Final_UI()
 
-    if not os.path.exists(count_file):
-        with open(count_file, 'w') as f:
-            f.write("0")
 
-    with open(count_file, 'r') as f:
-        count = int(f.read())
-
-    count +=1
-
-    with open(count_file, 'w') as f:
-        f.write(str(count))
-
-    print(count)
-    workbook = openpyxl.load_workbook('D:\\Title_Files\\Logs\\Logs.xlsx')
-    worksheet = workbook.active
-    start_time = datetime.datetime.now()
-    worksheet["A" + str(count)] = os.getlogin()
-    worksheet["B" + str(count)] = start_time
-    workbook.save('D:\\Title_Files\\Logs\\Logs.xlsx')
-
-    #getting Key from JSON file
-    with open('D:\\Title_Files\\Config\\Title_conig_file.json', 'r') as f:
-
-        data = json.load(f)
-        for i in data:
-            print(i)
-            if os.path.isfile('D:\\Title_Files\\Input\\Cook_county.xlsx'):
-             if i == 'Cook':
-                Code.Cook_County_Netro_Search.Final_A()
-
-    End_time = datetime.datetime.now()
-    worksheet['C' + str(count)] = End_time
-    worksheet['D' + str(count)] = "Task Completed"
-    workbook.save('D:\\Title_Files\\Logs\\Logs.xlsx')
 
 #if __name__=='__main__':
     #click()

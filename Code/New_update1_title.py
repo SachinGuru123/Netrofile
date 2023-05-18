@@ -359,7 +359,7 @@ def Final_A(i):
                     df1 = pd.DataFrame()
                     j = 1
 
-                    CC = int(Cnumber) / 100
+                    CC = int(total) / 100
                     roundoff = round(CC)
                     print(roundoff)
 
@@ -368,8 +368,9 @@ def Final_A(i):
                         cnp = "https://crs.cookcountyclerkil.gov" + Np
                         url = cnp
                         # r = requests.get(url,verify=False)
-                        time.sleep(1)
-                        updated = url[:-1]
+                        time.sleep(1) ############################################################################################
+                        #updated = url[:-1]
+                        updated = url.rstrip('0123456789')
                         print(j)
                         updated = updated + str(j)
                         # print(updated)
@@ -473,9 +474,7 @@ def Final_A(i):
 
 
             if total >= int(100):
-             CC = int(total) / 100
-             roundoff1 = round(CC)
-             print(roundoff1)
+
              qq = driver.find_element(By.XPATH, '//*[@id="Paging"]/div/ul/li[2]/a').get_attribute("href")
              qq = qq[:len(qq) - 1]
              print(qq)
@@ -490,6 +489,10 @@ def Final_A(i):
 
              df1 = pd.DataFrame()
              j = 1
+
+             CC = int(total) / 100
+             roundoff1 = round(CC)
+             print(roundoff1)
 
              while int(j) < int(roundoff1):
                 Np = soup.find("a", rel='next').get("href")
