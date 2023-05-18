@@ -1,10 +1,12 @@
 
 import os
-dirpath=os.path.dirname(os.getcwd())
-a=os.getcwd()
-print(a)
-print(dirpath)
+import  pandas as pd
+dataframe1 = pd.read_excel('D:\\Title_Files\\Input\\Cook_county.xlsx')
 
+
+
+E = dataframe1[dataframe1.columns[0]].count()
+print(E)
 
 '''
  def Final_B():

@@ -64,7 +64,7 @@ def Final_UI():
     time.sleep(4)
     driver.maximize_window()
     driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
-    driver.maximize_window()
+    #driver.maximize_window()
 
     elem = WebDriverWait(driver, 15).until(
     EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
