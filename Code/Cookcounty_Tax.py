@@ -1,3 +1,8 @@
+from datetime import datetime
+
+from selenium.common import NoSuchElementException
+
+
 def Final_UI():
  from selenium import webdriver
  from selenium.webdriver.chrome.service import Service
@@ -10,9 +15,9 @@ def Final_UI():
  from selenium.webdriver.support.ui import WebDriverWait
  from selenium.webdriver.support import expected_conditions as EC
  import pyautogui
- import glob
- import re,PyPDF2
- from openpyxl import load_workbook
+ # import glob
+ # import re,PyPDF2
+ # from openpyxl import load_workbook
  import openpyxl
  import Code.New_update1_title
  import Code.Lien_Report
@@ -21,7 +26,7 @@ def Final_UI():
 
  # par_dir=os.path.dirname(os.getcwd())
  # print(par_dir)
- dataframe1 = pd.read_excel('Input\\Cook_county.xlsx',engine='openpyxl')
+ dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine='openpyxl')
 
 
 
@@ -29,8 +34,13 @@ def Final_UI():
 
 
 
-
- for i in range(E):
+ try:
+  for i in range(E):
+    workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
+    worksheet = workbook.active
+    start_time = datetime.now()
+    worksheet['j' + str(int(i + 2))] = start_time
+    workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
     EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",''))
 
     FName = (dataframe1['NAME'][0])
@@ -46,22 +56,22 @@ def Final_UI():
     ORDERN=int(dataframe1['Order No'][i])
     City = str(dataframe1['City'][i])
     CC=City.split()[-1]
-    print(CC)
+   # print(CC)
     PIN = (dataframe1['State'][i])
     PIN=PIN.split("-")[-1]
-    print(PIN)
-
-    print(str(ORDERN))
-
-
-    print(EXCELADDRESS)
+    # print(PIN)
+    #
+    # print(str(ORDERN))
+    #
+    #
+    # print(EXCELADDRESS)
 
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
     chrome_options.add_argument('--disable-extensions')
 
 
-    driver = webdriver.Chrome("chromedriver_win32/chromedriver.exe",options=chrome_options)
+    driver = webdriver.Chrome(options=chrome_options)
     time.sleep(4)
     driver.maximize_window()
     driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
@@ -83,25 +93,26 @@ def Final_UI():
     driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[9]/div[1]/input').send_keys(City,Keys.ENTER)
 
     try:
+
         z=driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[2]/div[2]/div[2]/span').text
 
         z1 = (z).split()[0:2]
         z2=" ".join(z1)
-        print(z2.upper())
+        #print(z2.upper())
         Name = str(dataframe1['NAME'][i]).split()[0:2]
         Name1=(" ".join(Name))
         abc=10
-        print("Looping")
+       # print("Looping")
 
 
         #WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH,'/ html / body / form / div[4] / div[2] / div / div / div[3] / div / div / div[2] / div[1] / span'))) ==True:
         driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[3]/a').click()
         text=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text
-        print(text)
+        #print(text)
 
         os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
 
-
+        #print(os.getcwd()+'\\Input\\Cook_county.xlsx')
         workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
 
 
@@ -111,8 +122,8 @@ def Final_UI():
         #worksheet['B' + str(int(i+2))] = text
 
 
-        workbook.save('Input\\Cook_county.xlsx')
-        print("saving ")
+        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        #print("saving ")
 
         driver.execute_script('window.print();')
         time.sleep(3)
@@ -180,15 +191,20 @@ def Final_UI():
 
         workbook1.save(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx')
 
-        df1 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
+        df1 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
         f = df1[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
         #print(f)
 
-        df2 = pd.read_excel('Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
+        df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
 
         df_combined = df2.append(f)
-        combinedfile = 'Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
+        combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
+        # workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
+        # worksheet = workbook.active
+        end_time = datetime.now()
+        worksheet['k' + str(int(i + 2))] = end_time
+        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
 
 
     except:
@@ -197,12 +213,15 @@ def Final_UI():
             os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         except Exception:
             print("Error")
-        workbook = openpyxl.load_workbook('Input\\Cook_county.xlsx')
+        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
         worksheet = workbook.active
         worksheet['B' + str(int(i + 2))]='APN not Found'
-        workbook.save('Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
         driver.close()
         print("Closed")
+
+ except NoSuchElementException:
+        print(" The Recorder site server is down.")
 
 
 if __name__ == '__main__':
