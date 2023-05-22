@@ -204,7 +204,7 @@ def Final_UI():
 
         df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
 
-        df_combined = df2._append(f)
+        df_combined = df2.append(f)
         combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
         # workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
