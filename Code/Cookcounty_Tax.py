@@ -15,7 +15,13 @@ def Final_UI():
  from selenium.webdriver.support.ui import WebDriverWait
  from selenium.webdriver.support import expected_conditions as EC
  import pyautogui
+<<<<<<< HEAD
 
+=======
+ # import glob
+ # import re,PyPDF2
+ # from openpyxl import load_workbook
+>>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
  import openpyxl
  import Code.New_update1_title
  #import Code.Lien_Report
@@ -165,7 +171,11 @@ def Final_UI():
         df = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine="openpyxl")
 
 
+<<<<<<< HEAD
         #print(df['Order No'])
+=======
+        print(df['Order No'])
+>>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
         #print("value of i is "+str(i))
         Ordernumber = df['Order No'][i]
         #print(Ordernumber)
@@ -202,7 +212,11 @@ def Final_UI():
 
         df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
 
+<<<<<<< HEAD
         df_combined = df2._append(f)
+=======
+        df_combined = df2.append(f)
+>>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
         combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
         # workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
@@ -210,11 +224,14 @@ def Final_UI():
         end_time = datetime.now()
         worksheet['k' + str(int(i + 2))] = end_time
         workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+<<<<<<< HEAD
 
         source_folder = (os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         destination_folder = (os.getcwd() + "\\Processed")
 
         shutil.move(source_folder, destination_folder)
+=======
+>>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
 
 
     except Exception:
@@ -228,8 +245,11 @@ def Final_UI():
         worksheet['B' + str(int(i + 2))]='Maximum Retry Error'
         workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
         driver.close()
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
         #print("Closed")
 
   except Exception:
