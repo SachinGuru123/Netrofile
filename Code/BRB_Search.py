@@ -1,3 +1,6 @@
+from selenium.common import NoSuchElementException
+
+
 def  Final_C(ORDERN,F,L):
     from selenium import webdriver
     from selenium.webdriver.chrome.service import Service
@@ -15,13 +18,14 @@ def  Final_C(ORDERN,F,L):
     from openpyxl import load_workbook
     import openpyxl
 
-
+    print("Running BRB Search")
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
     chrome_options.add_argument('--disable-extensions')
 
     driver = webdriver.Chrome(options=chrome_options)
-
+    time.sleep(3)
+    #try:
     driver.maximize_window()
     driver.get('https://casesearch.cookcountyclerkofcourt.org/CivilCaseSearchAPI.aspx ')
     driver.find_element(By.XPATH,'/html/body/form/div[3]/section/div/div/div/div/div[2]/div[2]/div[2]/div/table/tbody/tr[2]/td/input').click()
@@ -34,15 +38,18 @@ def  Final_C(ORDERN,F,L):
 
     driver.execute_script('window.print();')
 
-    path = "D:\\Title_Files\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+    path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
 
     name = "BRB Search"
-    time.sleep(3)
+    time.sleep(4)
     pyautogui.typewrite(path + '\\' + name + '.pdf')
     time.sleep(3)
     pyautogui.press('enter')
     time.sleep(2)
     driver.close()
+
+   # except Exception:
+        #print(" The Recorder site server is down.")
 if __name__ == '__main__':
     Final_C()
 
