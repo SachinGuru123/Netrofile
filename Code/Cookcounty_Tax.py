@@ -218,10 +218,10 @@ def Final_UI():
 
 
     except Exception:
-        print("Tax Page Error")
+        print("Tax Loading Page Error")
         try:
             os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
-        except Exception:
+        except Exception :
             print("Error")
         workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
         worksheet = workbook.active
