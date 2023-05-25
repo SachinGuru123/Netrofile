@@ -18,6 +18,7 @@ def  Final_C(ORDERN,F,L):
     from openpyxl import load_workbook
     import openpyxl
 
+    time.sleep(1)
     print("Running BRB Search")
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')

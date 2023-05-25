@@ -43,17 +43,13 @@ def Final_A(i):
     from datetime import datetime
     import math
 
+    time.sleep(1)
     dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx')
 
 
     E = dataframe1[dataframe1.columns[0]].count()
-<<<<<<< HEAD
     #print(dataframe1['County Name'][0])
     print("Running Recorder Page")
-=======
-    print(dataframe1['County Name'][0])
-
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
 
     #try:
     if dataframe1['County Name'][i]== ('Cook'):
@@ -81,7 +77,7 @@ def Final_A(i):
             chrome_options.add_argument('--disable-extensions')
 
             driver = webdriver.Chrome(options=chrome_options)
-            time.sleep(3)
+            time.sleep(2)
             driver.get('https://crs.cookcountyclerkil.gov/Search')
             driver.maximize_window()
             time.sleep(2)
@@ -138,7 +134,7 @@ def Final_A(i):
             worksheet = workbook.active
             #start_time = datetime.datetime.now()
             #worksheet['F' + str(int(i + 2))] = start_time
-            k = 1
+            k = 1 #for DOC counting Reference
 
             df.to_excel(
                 os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx',
@@ -146,7 +142,7 @@ def Final_A(i):
             workbook.save(os.getcwd() + '\\Input\\Cook_county.xlsx')
             ####################Test 5-23-2023###################################
             j = 1
-            link = []
+            link = [] #all  href links addding to list
             while j < int(COunt):
                 href_ad = driver.find_element(By.XPATH,
                                               '//*[@id="tblData"]/tbody/tr[' + str(j) + ']/td[2]/a').get_attribute(
@@ -169,7 +165,7 @@ def Final_A(i):
                     'href')
                 #print(LinkF)
 
-                max_retry = 3
+                max_retry = 5
                 retry_count = 0
                 while retry_count < max_retry:
                     try:
@@ -196,21 +192,13 @@ def Final_A(i):
                     #print("A1")
                     if bool(driver.find_element(By.XPATH,
                                                 '//*[@id="tblData"]/tbody/tr['+str(k)+']/td[2]/a')) == True:
-<<<<<<< HEAD
                         #print("A2")
-=======
-                        print("A2")
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
 
                         hr=driver.find_element(By.XPATH,
                                                  '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr[' + str(
                                                     k) + ']/td[2]/a').get_attribute("href")
                         #driver.find_element(By.XPATH,'//*[@id="tblData"]/tbody/tr['+str(k)+']/td[2]/a').click()
-<<<<<<< HEAD
                         #print("A3")
-=======
-                        print("A3")
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
                         driver.get(hr)
                         time.sleep(2)
                         #WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,'/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[1]/div[1]/table/tbody/tr[1]/td')))
@@ -221,7 +209,6 @@ def Final_A(i):
                                                 '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
                             'href')
                         pdf_url = A
-<<<<<<< HEAD
                         url = A
                         
                         max_retry = 3
@@ -239,29 +226,6 @@ def Final_A(i):
 
                             except Exception as e:
                                 retry_count += 1
-=======
-
-                        try:
-                            url = A
-                            r = requests.get(url)
-                            print(r.status_code)
-                            with open(
-                                    'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
-                                    + '\\Doc' + str(k) + '   ' + str(d) + '.pdf', 'wb') as fd:
-                                for chunk in r.iter_content(chunk_size=2000):
-                                    fd.write(chunk)
-
-
-                        finally:
-                            url = A
-                            r = requests.get(url)
-                            print(r.status_code)
-                            with open(
-                                    'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
-                                    + '\\Doc' + str(k) + '   ' + str(d) + '.pdf', 'wb') as fd:
-                                for chunk in r.iter_content(chunk_size=2000):
-                                    fd.write(chunk)
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
                         time.sleep(6)
                         #driver.back()
 
@@ -277,15 +241,8 @@ def Final_A(i):
             ###############
             driver.get('https://crs.cookcountyclerkil.gov/Search')
 
-<<<<<<< HEAD
             driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').clear()
             driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').send_keys(
-=======
-            workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
-
-            driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/form[1]/div[2]/div/div[1]/input').clear()
-            driver.find_element(By.XPATH, '/html/body/div[2]/div/div[3]/div/form[1]/div[2]/div/div[1]/input').send_keys(
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
                 EXCELAPN, Keys.ENTER)
             time.sleep(3)
             aa = driver.find_element(By.XPATH, '//table')
@@ -334,11 +291,7 @@ def Final_A(i):
                                                  '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span').text
             driver.execute_script('window.print();')
             time.sleep(4)
-<<<<<<< HEAD
             #print(Total_files_No)
-=======
-            print(Total_files_No)
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
             path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
             name = "ParcelNumber_index"
             time.sleep(1)
@@ -399,7 +352,7 @@ def Final_A(i):
                                         + '\\APN Doc' +" "+ str(qq) + " " + '.pdf', 'wb') as f:
                                     f.write(respnse.content)
                              '''
-                             max_retry = 3
+                             max_retry = 5
                              retry_count = 0
                              while retry_count < max_retry:
                                  try:
@@ -469,7 +422,7 @@ def Final_A(i):
                     time.sleep(2)
                     a = driver.find_element(By.XPATH, '//table')
                     df = pd.read_html(a.get_attribute('outerHTML'))[0]
-                    df1 = df1.append(df)
+                    df1 = df1._append(df)
                     time.sleep(3)
                     r = requests.get(qq)
                     time.sleep(3)
@@ -511,13 +464,8 @@ def Final_A(i):
                         table = soup.find('table')
                         df = pd.read_html(str(table))[0]
                         # print(df)
-<<<<<<< HEAD
                         df1 = df1._append(df)
                         #print(df1)
-=======
-                        df1 = df1.append(df)
-                        print(df1)
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
 
                         j += 1
                         # print(j)
@@ -605,13 +553,8 @@ def Final_A(i):
              time.sleep(2)
              a = driver.find_element(By.XPATH, '//table')
              df = pd.read_html(a.get_attribute('outerHTML'))[0]
-<<<<<<< HEAD
              #print(df)
              df1 = df1._append(df)
-=======
-             print(df)
-             df1 = df1.append(df)
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
              #df1= df1.append(df)
 
              r = requests.get(qq)
@@ -657,15 +600,9 @@ def Final_A(i):
                 time.sleep(3)
                 df = pd.read_html(str(table))[0]
                 time.sleep(1)
-<<<<<<< HEAD
                 #print(df)
                 df1 = df1._append(df)
                 #print(df1)
-=======
-                # print(df)
-                df1 = df1.append(df)
-                print(df1)
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
 
                 j += 1
                 # print(j)
@@ -731,11 +668,7 @@ def Final_A(i):
 
 
 
-<<<<<<< HEAD
     #print("Completed")
-=======
-    print("Completed")
->>>>>>> 062168a37bf55e848ea4e8f582cd440647d1cc5c
     time.sleep(2)
 
 
