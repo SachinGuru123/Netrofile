@@ -142,7 +142,7 @@ def Final_A(i):
             workbook.save(os.getcwd() + '\\Input\\Cook_county.xlsx')
             ####################Test 5-23-2023###################################
             j = 1
-            link = [] #all  href links addding to list
+            link = [] #all
             while j < int(COunt):
                 href_ad = driver.find_element(By.XPATH,
                                               '//*[@id="tblData"]/tbody/tr[' + str(j) + ']/td[2]/a').get_attribute(

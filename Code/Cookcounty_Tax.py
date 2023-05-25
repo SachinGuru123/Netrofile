@@ -218,7 +218,7 @@ def Final_UI():
 
 
     except Exception:
-        print("Tax Loading Page Error")
+        print("Max Retry Error")
         try:
             os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         except Exception :
