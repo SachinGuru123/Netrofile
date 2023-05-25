@@ -44,7 +44,7 @@ def Final_A(i,file):
     import math
 
     time.sleep(1)
-    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx')
+    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file)
 
 
     E = dataframe1[dataframe1.columns[0]].count()
@@ -94,11 +94,11 @@ def Final_A(i,file):
 
             aq=driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form[1]/div[2]/div/div[2]').text
 
-            workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
+            workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
             worksheet = workbook.active
             GIT=aq.split("|")[0]
             worksheet['H' + str(int(i + 2))] =GIT
-            workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+            workbook.save(os.getcwd()+'\\Input\\'+file)
 
             # converter.convert(driver., "D:\Title_Files\PN Results.pdf")
             a = driver.find_element(By.XPATH, '//table')
@@ -130,7 +130,7 @@ def Final_A(i,file):
             #print(COunt)
 
             workbook = openpyxl.load_workbook(
-                os.getcwd()+'\\Input\\Cook_county.xlsx')
+                os.getcwd()+'\\Input\\'+file)
             worksheet = workbook.active
             #start_time = datetime.datetime.now()
             #worksheet['F' + str(int(i + 2))] = start_time
@@ -139,7 +139,7 @@ def Final_A(i,file):
             df.to_excel(
                 os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx',
                 index=False)
-            workbook.save(os.getcwd() + '\\Input\\Cook_county.xlsx')
+            workbook.save(os.getcwd() + '\\Input\\'+file)
             ####################Test 5-23-2023###################################
             j = 1
             link = [] #all
@@ -384,7 +384,7 @@ def Final_A(i,file):
             #############################################Second Name###################
 
 
-            workbook = openpyxl.load_workbook('Input\Cook_county.xlsx')
+            workbook = openpyxl.load_workbook('Input\\'+file)
             sheet = workbook.active
 
             cell_value = sheet['I'+str(i+2)].value
