@@ -3,7 +3,7 @@ from datetime import datetime
 from selenium.common import NoSuchElementException
 
 
-def Final_UI():
+def Final_UI(file):
  from selenium import webdriver
  from selenium.webdriver.chrome.service import Service
  from selenium.webdriver.common.by import By
@@ -23,7 +23,7 @@ def Final_UI():
  import os
 
  time.sleep(1)
- dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine='openpyxl')
+ dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine='openpyxl')
 
 
 
@@ -34,11 +34,11 @@ def Final_UI():
 
  for i in range(E):
   try:
-    workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
+    workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\'+file)
     worksheet = workbook.active
     start_time = datetime.now()
     worksheet['j' + str(int(i + 2))] = start_time
-    workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+    workbook.save(os.getcwd()+'\\Input\\'+file)
     EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",''))
 
     FName = (dataframe1['NAME'][0])
@@ -116,8 +116,8 @@ def Final_UI():
 
         os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
 
-        #print(os.getcwd()+'\\Input\\Cook_county.xlsx')
-        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        #print(os.getcwd()+'\\Input\\'+file)
+        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
 
 
         worksheet = workbook.active
@@ -126,7 +126,7 @@ def Final_UI():
         #worksheet['B' + str(int(i+2))] = text
 
 
-        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\'+file)
         #print("saving ")
 
         driver.execute_script('window.print();')
@@ -140,9 +140,9 @@ def Final_UI():
         time.sleep(4)
         driver.close()
 
-        Code.New_update1_title.Final_A(i)
+        Code.New_update1_title.Final_A(i,file)
 
-        #Code.Lien_Report.Final_B(ORDERN,F,L)
+        #Code.Lien_Report.Final_B(ORDERN,F,L,file)
 
 
         Code.BRB_Search.Final_C(ORDERN,F,L)
@@ -161,7 +161,7 @@ def Final_UI():
         sheet['A9'] = '###################################################################################'
         #sheet['A10']='DOC ID '
         print("reading excel sheet")
-        df = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine="openpyxl")
+        df = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine="openpyxl")
 
 
         #print(df['Order No'])
@@ -201,14 +201,14 @@ def Final_UI():
 
         df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx',engine='openpyxl')
 
-        df_combined = df2._append(f)
+        df_combined = df2.append(f)
         combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\SearchNoteXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
-        # workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
+        # workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\'+file)
         # worksheet = workbook.active
         end_time = datetime.now()
         worksheet['k' + str(int(i + 2))] = end_time
-        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\'+file)
 
         source_folder = (os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         destination_folder = (os.getcwd() + "\\Processed")
@@ -223,10 +223,10 @@ def Final_UI():
             os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         except Exception :
             print("Error")
-        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
         worksheet = workbook.active
         worksheet['B' + str(int(i + 2))]='Maximum Retry Error'
-        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\'+file)
         driver.close()
 
 

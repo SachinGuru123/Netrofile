@@ -1,4 +1,8 @@
-import os
+import os, shutil
+from Code import Cookcounty_Tax as cook
+from Code import  New_update1_title
+from Code import BRB_Search
+from Code import Lien_Report
 
 watchDirectory = os.getcwd()+'\\Input'
 pollTime = 5 #in seconds
@@ -20,8 +24,13 @@ def listComparison(OriginalList: list, NewList: list):
     return (differencesList)
 
 
-def doThingsWithNewFiles(newFiles: list):
+def triggerBot(newFiles: list):
     print(f'I would do things with file(s) {newFiles}')
+    for file in newFiles:
+        print("starting automation for file ", file)
+        cook.Final_UI(file)
+        shutil.move(os.getcwd() + '\\Input\\' + file, os.getcwd() + '\\Processed\\' + file)
+        time.sleep(2)
 
 
 import time
@@ -41,7 +50,7 @@ def fileWatcher(my_dir: str, pollTime: int):
 
         previousFileList = newFileList
         if len(fileDiff) == 0: continue
-        doThingsWithNewFiles(fileDiff)
+        triggerBot(fileDiff)
 
 
 fileWatcher(watchDirectory, pollTime)

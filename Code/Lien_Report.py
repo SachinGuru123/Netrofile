@@ -1,7 +1,7 @@
 from selenium.common import NoSuchElementException
 
 
-def Final_B(ORDERN,F,L):
+def Final_B(ORDERN,F,L,file):
     from selenium import webdriver
     from selenium.webdriver.chrome.service import Service
     from selenium.webdriver.common.by import By
@@ -16,7 +16,7 @@ def Final_B(ORDERN,F,L):
     import glob
     import re,PyPDF2
 
-    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx')
+    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file)
     EXCELADDRESS = str(dataframe1['NAME'][0].replace("-",''))
     Firstname=(EXCELADDRESS.split()[0:1])
     Lastname=(EXCELADDRESS.split()[-1])

@@ -1,7 +1,7 @@
 from selenium.common import NoSuchElementException
 
 
-def Final_A(i):
+def Final_A(i,file):
 
     import datetime
     import sys
@@ -422,7 +422,7 @@ def Final_A(i):
                     time.sleep(2)
                     a = driver.find_element(By.XPATH, '//table')
                     df = pd.read_html(a.get_attribute('outerHTML'))[0]
-                    df1 = df1._append(df)
+                    df1 = df1.append(df)
                     time.sleep(3)
                     r = requests.get(qq)
                     time.sleep(3)
@@ -464,7 +464,7 @@ def Final_A(i):
                         table = soup.find('table')
                         df = pd.read_html(str(table))[0]
                         # print(df)
-                        df1 = df1._append(df)
+                        df1 = df1.append(df)
                         #print(df1)
 
                         j += 1
@@ -554,7 +554,7 @@ def Final_A(i):
              a = driver.find_element(By.XPATH, '//table')
              df = pd.read_html(a.get_attribute('outerHTML'))[0]
              #print(df)
-             df1 = df1._append(df)
+             df1 = df1.append(df)
              #df1= df1.append(df)
 
              r = requests.get(qq)
@@ -601,7 +601,7 @@ def Final_A(i):
                 df = pd.read_html(str(table))[0]
                 time.sleep(1)
                 #print(df)
-                df1 = df1._append(df)
+                df1 = df1.append(df)
                 #print(df1)
 
                 j += 1
