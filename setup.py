@@ -1,6 +1,6 @@
 from cx_Freeze import setup, Executable
 
-setup(name="NetroSearch",
-      version="1.0",
-      description="Title Search Automation",
+setup(name="AutoBot",
+      version="1.2",
+      description="Title Search Automation cook county",
       executables=[Executable("filewatcher.py")])
