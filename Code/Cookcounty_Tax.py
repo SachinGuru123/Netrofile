@@ -1,47 +1,38 @@
 from datetime import datetime
-
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import pandas as pd
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pyautogui
+# import glob
+# import re,PyPDF2
+# from openpyxl import load_workbook
+import openpyxl
+import Code.New_update1_title
+import Code.Lien_Report
+import Code.BRB_Search
+import os
 from selenium.common import NoSuchElementException
 
 
-def Final_UI():
- from selenium import webdriver
- from selenium.webdriver.chrome.service import Service
- from selenium.webdriver.common.by import By
- from selenium.webdriver.common.keys import Keys
- import time
- import pandas as pd
- import shutil, os
- from selenium.webdriver.chrome.options import Options
- from selenium.webdriver.support.ui import WebDriverWait
- from selenium.webdriver.support import expected_conditions as EC
- import pyautogui
- # import glob
- # import re,PyPDF2
- # from openpyxl import load_workbook
- import openpyxl
- import Code.New_update1_title
- import Code.Lien_Report
- import Code.BRB_Search
- import os
+def Final_UI(file):
 
- # par_dir=os.path.dirname(os.getcwd())
- # print(par_dir)
- dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine='openpyxl')
-
-
+ dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine='openpyxl')
 
  E = dataframe1[dataframe1.columns[0]].count()
 
-
-
-
  for i in range(E):
   try:
-    workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
+    workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\'+file)
     worksheet = workbook.active
     start_time = datetime.now()
     worksheet['j' + str(int(i + 2))] = start_time
-    workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+    workbook.save(os.getcwd()+'\\Input\\'+file)
     EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",''))
 
     FName = (dataframe1['NAME'][0])
@@ -52,20 +43,15 @@ def Final_UI():
     HOUSENUMBER=(EXCELADDRESS.split()[0:1])
     STREETNAME=(EXCELADDRESS.split()[1:])
     STREETNAME=(" ".join(STREETNAME))
-    print(STREETNAME)
+
 
     ORDERN=int(dataframe1['Order No'][i])
     City = str(dataframe1['City'][i])
     CC=City.split()[-1]
-   # print(CC)
+
     PIN = (dataframe1['State'][i])
     PIN=PIN.split("-")[-1]
-    # print(PIN)
-    #
-    # print(str(ORDERN))
-    #
-    #
-    # print(EXCELADDRESS)
+
 
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
@@ -78,12 +64,11 @@ def Final_UI():
     driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
     #driver.maximize_window()
 
-    elem = WebDriverWait(driver, 15).until(
-    EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
+    elem = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
     time.sleep(2)
     driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[1]/div/ul/li[2]/div/ul/li[3]').click()
     time.sleep(2)
-    elem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
+    elem1 = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
     time.sleep(2)
     driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtStreetName"]').send_keys(STREETNAME)
     time.sleep(1)
@@ -119,8 +104,8 @@ def Final_UI():
 
         os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
 
-        #print(os.getcwd()+'\\Input\\Cook_county.xlsx')
-        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
+
+        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
 
 
         worksheet = workbook.active
@@ -129,7 +114,7 @@ def Final_UI():
         #worksheet['B' + str(int(i+2))] = text
 
 
-        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\'+file)
         #print("saving ")
 
         driver.execute_script('window.print();')
@@ -145,7 +130,7 @@ def Final_UI():
 
         Code.New_update1_title.Final_A(i)
 
-        Code.Lien_Report.Final_B(ORDERN,F,L)
+        Code.Lien_Report.Final_B(ORDERN,F,L,file)
 
 
         Code.BRB_Search.Final_C(ORDERN,F,L)
@@ -163,24 +148,22 @@ def Final_UI():
         sheet['A8'] = 'NAMES RUN:'
         sheet['A9'] = '###################################################################################'
         #sheet['A10']='DOC ID '
-        print("reading excel sheet")
-        df = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx',engine="openpyxl")
+
+        df = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine="openpyxl")
 
 
-        print(df['Order No'])
+
         #print("value of i is "+str(i))
         Ordernumber = df['Order No'][i]
-        print(Ordernumber)
         BORROWERNAME = df['NAME'][i]
-        print(BORROWERNAME)
         ADDRESS = df['Property Address'][i]
-        print(ADDRESS)
+
         COUNTY = df['County Name'][i]
-        print(COUNTY)
+
         APN = df['APN'][i]
-        print(APN)
+
         NAMESRUN1 = df['NAME'][i]
-        print(NAMESRUN1)
+
         GIT = df['GTD'][i]
 
         sheet['B1'] = Ordernumber
@@ -200,35 +183,33 @@ def Final_UI():
 
         df1 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
         f = df1[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
-        #print(f)
 
         df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
 
         df_combined = df2.append(f)
         combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
-        # workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\Cook_county.xlsx')
-        # worksheet = workbook.active
+
         end_time = datetime.now()
         worksheet['k' + str(int(i + 2))] = end_time
-        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\'+file)
 
 
-    except Exception:
-        print("EXception")
+    except Exception as e:
+        print("EXception : "+str(e))
         try:
             os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
-        except Exception:
-            print("Error")
-        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        except Exception as e:
+            print("Error : "+str(e))
+        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
         worksheet = workbook.active
         worksheet['B' + str(int(i + 2))]='Maximum Retry Error'
-        workbook.save(os.getcwd()+'\\Input\\Cook_county.xlsx')
+        workbook.save(os.getcwd()+'\\Input\\'+file)
         driver.close()
         #print("Closed")
 
-  except Exception:
-        print(" Maximum Retry Error.")
+  except Exception as e:
+        print(" Maximum Retry Error."+str(e))
 
 
 

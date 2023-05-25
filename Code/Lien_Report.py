@@ -1,28 +1,28 @@
 from selenium.common import NoSuchElementException
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import pandas as pd
+import shutil, os
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pyautogui
+import glob
+import re,PyPDF2
+
+def Final_B(ORDERN,F,L,file):
 
 
-def Final_B(ORDERN,F,L):
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.common.keys import Keys
-    import time
-    import pandas as pd
-    import shutil, os
-    from selenium.webdriver.chrome.options import Options
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import pyautogui
-    import glob
-    import re,PyPDF2
-
-    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx')
+    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file)
     EXCELADDRESS = str(dataframe1['NAME'][0].replace("-",''))
     Firstname=(EXCELADDRESS.split()[0:1])
     Lastname=(EXCELADDRESS.split()[-1])
     # ORDERN=(dataframe1['Order No'][0])#.replace("-",''))
-    print(Lastname)
-    print(Firstname)
+    # print(Lastname)
+    # print(Firstname)
     County='CooK'
 
     #try:

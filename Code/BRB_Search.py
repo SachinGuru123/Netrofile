@@ -1,23 +1,21 @@
 from selenium.common import NoSuchElementException
-
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import pandas as pd
+import shutil, os
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pyautogui
+import glob
+import re,PyPDF2
+from openpyxl import load_workbook
+import openpyxl
 
 def  Final_C(ORDERN,F,L):
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.common.keys import Keys
-    import time
-    import pandas as pd
-    import shutil, os
-    from selenium.webdriver.chrome.options import Options
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import pyautogui
-    import glob
-    import re,PyPDF2
-    from openpyxl import load_workbook
-    import openpyxl
-
 
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')

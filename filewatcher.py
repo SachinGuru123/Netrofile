@@ -1,4 +1,5 @@
 import os
+import NetroSearch
 
 watchDirectory = os.getcwd()+'\\Input'
 pollTime = 5 #in seconds
@@ -20,8 +21,9 @@ def listComparison(OriginalList: list, NewList: list):
     return (differencesList)
 
 
-def doThingsWithNewFiles(newFiles: list):
-    print(f'I would do things with file(s) {newFiles}')
+def triggerBot(newFiles: list):
+    print(f'I would automate order(s) {newFiles}')
+    NetroSearch.main(newFiles)
 
 
 import time
@@ -41,7 +43,7 @@ def fileWatcher(my_dir: str, pollTime: int):
 
         previousFileList = newFileList
         if len(fileDiff) == 0: continue
-        doThingsWithNewFiles(fileDiff)
+        triggerBot(fileDiff)
 
 
 fileWatcher(watchDirectory, pollTime)

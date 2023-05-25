@@ -1,60 +1,52 @@
-from selenium.common import NoSuchElementException
-
+from selenium import webdriver
+#  from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+  #  import pandas as pd
+import shutil, os
+    # from selenium.webdriver.support.ui import WebDriverWait
+    # from selenium.webdriver.support import expected_conditions as EC
+    # from selenium.webdriver.chrome.options import Options
+    # from openpyxl import load_workbook
+    # from selenium.webdriver.common.action_chains import ActionChains
+    # from tkinter import Tk
+    # import tkinter
+import pandas as pd
+    # import selenium.webdriver
+    # import requests
+    # from PIL import Image, ImageTk
+    # from tkinter import ttk
+    # import requests
+    # import shutil
+    # import threading
+import openpyxl
+#   from urllib.parse import urljoin
+import requests
+    #from pyhtml2pdf import converter
+from selenium.webdriver.chrome.options import Options
+import pyautogui
+    # import glob
+    # import re, PyPDF2
+    # from selenium.webdriver.support.ui import WebDriverWait
+    # from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
+    # from datetime import datetime
+    # import math
 
 def Final_A(i):
-
-    import datetime
-    import sys
-    import threading
-    import webbrowser
-    from selenium import webdriver
-    from selenium.webdriver.chrome.service import Service
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.common.keys import Keys
-    import time
-    import pandas as pd
-    import shutil, os
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    from selenium.webdriver.chrome.options import Options
-    from openpyxl import load_workbook
-    from selenium.webdriver.common.action_chains import ActionChains
-    from tkinter import Tk
-    import tkinter
-    import pandas as pd
-    import selenium.webdriver
-    import requests
-    from PIL import Image, ImageTk
-    from tkinter import ttk
-    import requests
-    import shutil
-    import threading
-    import openpyxl
-    from urllib.parse import urljoin
-    import requests
-    from pyhtml2pdf import converter
-    from selenium.webdriver.chrome.options import Options
-    import pyautogui
-    import glob
-    import re, PyPDF2
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    from bs4 import BeautifulSoup
-    from datetime import datetime
-    import math
-
     dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\Cook_county.xlsx')
 
 
     E = dataframe1[dataframe1.columns[0]].count()
-    print(dataframe1['County Name'][0])
+
 
 
     #try:
     if dataframe1['County Name'][i]== ('Cook'):
 
             EXCELAPN = str(dataframe1['APN'][i])  # .replace("-",''))
-            print(EXCELAPN)
+            #print(EXCELAPN)
 
             EXCELNAME = dataframe1['NAME'][i]
 
@@ -62,9 +54,9 @@ def Final_A(i):
             aa = ExCELADDRESS.split()[0:3]
             ab = (' '.join(map(str, aa)))
 
-            print(ab)
+            #print(ab)
             EXCELORDERNO = int(dataframe1['Order No'][i])
-            print(EXCELORDERNO)
+            #print(EXCELORDERNO)
 
             # order number is created
             # os.makedirs("Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)))
@@ -117,16 +109,16 @@ def Final_A(i):
             pyautogui.press('enter')
             time.sleep(1)
 
-            print("Done")
+            #print("Done")
 
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
 
             time.sleep(2)
             COunt = driver.find_element(By.XPATH, '//*[@id="result"]/div[1]/div/span').text
-            print(str(COunt))
+            #print(str(COunt))
             COunt = int(COunt) + 1
-            print(COunt)
+            #print(COunt)
 
             workbook = openpyxl.load_workbook(
                 os.getcwd()+'\\Input\\Cook_county.xlsx')
@@ -139,19 +131,19 @@ def Final_A(i):
                 os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx',
                 index=False)
 
-            print(COunt)
+            #print(COunt)
             while k < int(COunt):
                 try:
-                    print("A1")
+                    #print("A1")
                     if bool(driver.find_element(By.XPATH,
                                                 '//*[@id="tblData"]/tbody/tr['+str(k)+']/td[2]/a')) == True:
-                        print("A2")
+                        #print("A2")
 
                         hr=driver.find_element(By.XPATH,
                                                  '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr[' + str(
                                                     k) + ']/td[2]/a').get_attribute("href")
                         #driver.find_element(By.XPATH,'//*[@id="tblData"]/tbody/tr['+str(k)+']/td[2]/a').click()
-                        print("A3")
+                        #print("A3")
                         driver.get(hr)
                         time.sleep(2)
                         #WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.XPATH,'/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[1]/div[1]/table/tbody/tr[1]/td')))
@@ -166,7 +158,7 @@ def Final_A(i):
                         try:
                             url = A
                             r = requests.get(url)
-                            print(r.status_code)
+                            #print(r.status_code)
                             with open(
                                     'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
                                     + '\\Doc' + str(k) + '   ' + str(d) + '.pdf', 'wb') as fd:
@@ -177,7 +169,7 @@ def Final_A(i):
                         finally:
                             url = A
                             r = requests.get(url)
-                            print(r.status_code)
+                            #print(r.status_code)
                             with open(
                                     'Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
                                     + '\\Doc' + str(k) + '   ' + str(d) + '.pdf', 'wb') as fd:
@@ -188,9 +180,9 @@ def Final_A(i):
 
                        
                 except Exception as Err:
-                    # print(Err)
+                    print(Err)
                     k = k + 1
-                    print("A")
+                    #print("A")
                     driver.back()
 
 
@@ -233,9 +225,9 @@ def Final_A(i):
             mask = ~col1.isin(col2)
             non_matching_values = col1[~mask]
             non_comapred_values = col2[~col2.isin(col1)]
-            print(df2['Doc Number'].iloc[-1])
+            #print(df2['Doc Number'].iloc[-1])
             lastdate = (df2['Doc Recorded'].iloc[-1])
-            print(non_comapred_values)
+            #print(non_comapred_values)
             L=[]
             for x in non_comapred_values:
                 L.append(x)
@@ -247,7 +239,7 @@ def Final_A(i):
                                                  '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span').text
             driver.execute_script('window.print();')
             time.sleep(4)
-            print(Total_files_No)
+            #print(Total_files_No)
             path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
             name = "ParcelNumber_index"
             time.sleep(1)
@@ -255,7 +247,7 @@ def Final_A(i):
             time.sleep(1)
             pyautogui.press('enter')
             time.sleep(1)
-            print(L)
+            #print(L)
 
             M = 1
             for M in range(int(Total_files_No)):
@@ -264,20 +256,20 @@ def Final_A(i):
 
                     if int(M) <= int(Total_files_No):
 
-                        # print(i)
+                        # #print(i)
                         DateAPN = driver.find_element(By.XPATH,
                                                       '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr[' + str(
                                                         M) + ']/td[5]/span').text
-                        print(DateAPN)
+                        #print(DateAPN)
                         DOCNO=driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr['+str(M)+']/td[3]/span/span').text
-                        print(DOCNO)
+                        #print(DOCNO)
 
                         if int(DOCNO) in L:
-                             print("DOC Exist")
+                             #print("DOC Exist")
                              qq = driver.find_element(By.XPATH,
                                                      '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr[' + str(
                                                          M) + ']/td[3]/span/span').text
-                             print("DOC Exist2")
+                             #print("DOC Exist2")
                              qqq=driver.find_element(By.XPATH,
                                                       '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[4]/table/tbody/tr['+str(M)+']/td[2]/a').get_attribute('href')
 
@@ -320,7 +312,7 @@ def Final_A(i):
             sheet = workbook.active
 
             cell_value = sheet['I'+str(i+2)].value
-            print(cell_value)
+            #print(cell_value)
 
             if cell_value is  None:
                 print("Second name not Exist")
@@ -341,16 +333,16 @@ def Final_A(i):
                 z = (z.replace(",", ""))
                 total = int(z)  # (int(z) // int(100) - 1)
                 df1 = pd.DataFrame()
-                print(total)
+                #print(total)
 
                 Cnumber=driver.find_element(By.XPATH,'/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span[1]').text
-                print(Cnumber)
+                #print(Cnumber)
 
 
                 if total >= int(100):
                     qq = driver.find_element(By.XPATH, '//*[@id="Paging"]/div/ul/li[2]/a').get_attribute("href")
                     qq = qq[:len(qq)-1]
-                    print(qq)
+                    #print(qq)
                     time.sleep(2)
                     a = driver.find_element(By.XPATH, '//table')
                     df = pd.read_html(a.get_attribute('outerHTML'))[0]
@@ -365,7 +357,7 @@ def Final_A(i):
 
                     CC = int(total) / 100
                     roundoff = round(CC)
-                    print(roundoff)
+                    #print(roundoff)
 
                     while int(j) <= int(roundoff):
                         Np = soup.find("a", rel='next').get("href")
@@ -375,17 +367,17 @@ def Final_A(i):
                         time.sleep(1) ############################################################################################
                         #updated = url[:-1]
                         updated = url.rstrip('0123456789')
-                        print(j)
+                        #print(j)
                         updated = updated + str(j)
-                        # print(updated)
+                        # #print(updated)
 
                         max_retry = 2
                         retry_count = 0
                         while retry_count < max_retry:
                             try:
                                 r = requests.get(updated)  # verify=False
-                                # print(r.content)
-                                print(updated)
+                                # #print(r.content)
+                                #print(updated)
                                 break
                                 #retry_count += 1
 
@@ -395,12 +387,12 @@ def Final_A(i):
                         soup = BeautifulSoup(r.content, 'html.parser')
                         table = soup.find('table')
                         df = pd.read_html(str(table))[0]
-                        # print(df)
+                        # #print(df)
                         df1 = df1.append(df)
-                        print(df1)
+                        #print(df1)
 
                         j += 1
-                        # print(j)
+                        # #print(j)
 
                     # df1.to_excel('D:\Title_Files\Output\COOK_COUNTY\Order No 1192237\c.xlsx', index=False)  # index=False
                     df1.to_excel(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(
@@ -413,17 +405,18 @@ def Final_A(i):
                     APN = str(EXCELAPN)  # '02-08-400-010-0000'
                     indices = df.loc[df['APN Number'] == APN].index.tolist()
                     a = []
-                    # print indices of all matches one by one
+                    # #print indices of all matches one by one
                     for i in indices:
                         if i / 100 < 1:
-                            print("Index: 1")
+                            #print("Index: 1")
+                            pass
                         else:
-                            print("Index:", round(i / 100))
+                            #print("Index:", round(i / 100))
                             a.append(round(i / 100))
 
                     unique_numbers = []
                     [unique_numbers.append(num) for num in a if num not in unique_numbers]
-                    print(unique_numbers)
+                    #print(unique_numbers)
 
                     l = 1
                     for k in unique_numbers:
@@ -470,22 +463,22 @@ def Final_A(i):
             z = (z.replace(",", ""))
             total = int(z)          #(int(z) // int(100) - 1)
             df1 = pd.DataFrame()
-            print(total)
+            #print(total)
 
             Cnumber1 = driver.find_element(By.XPATH,
                                           '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span[1]').text
-            print(Cnumber1)
+            #print(Cnumber1)
 
 
             if total >= int(100):
 
              qq = driver.find_element(By.XPATH, '//*[@id="Paging"]/div/ul/li[2]/a').get_attribute("href")
              qq = qq[:len(qq) - 1]
-             print(qq)
+             #print(qq)
              time.sleep(2)
              a = driver.find_element(By.XPATH, '//table')
              df = pd.read_html(a.get_attribute('outerHTML'))[0]
-             print(df)
+             #print(df)
              df1 = df1.append(df)
              #df1= df1.append(df)
 
@@ -498,7 +491,7 @@ def Final_A(i):
 
              CC = int(total) / 100
              roundoff1 = round(CC)
-             print(roundoff1)
+             #print(roundoff1)
 
              while int(j) < int(roundoff1):
                 Np = soup.find("a", rel='next').get("href")
@@ -508,18 +501,18 @@ def Final_A(i):
                 time.sleep(1)
                 #updated = url[:-1]
                 updated=url.rstrip('0123456789')
-                print(j)
+                #print(j)
                 #updated = updated + str(j)
                 updated = url.rstrip('0123456789')
-                # print(updated)
+                # #print(updated)
 
                 max_retry = 3
                 retry_count = 0
                 while retry_count < max_retry:
                     try:
                         r = requests.get(updated)  # verify=False
-                        # print(r.content)
-                        print(updated)
+                        # #print(r.content)
+                        #print(updated)
                         retry_count += 1
                         break
 
@@ -531,12 +524,12 @@ def Final_A(i):
                 time.sleep(3)
                 df = pd.read_html(str(table))[0]
                 time.sleep(1)
-                # print(df)
+                # #print(df)
                 df1 = df1.append(df)
-                print(df1)
+                #print(df1)
 
                 j += 1
-                # print(j)
+                # #print(j)
 
 
              #df1.to_excel('D:\Title_Files\Output\COOK_COUNTY\Order No 1192237\c.xlsx', index=False)  # index=False
@@ -549,17 +542,18 @@ def Final_A(i):
              APN = str(EXCELAPN)#'02-08-400-010-0000'
              indices = df.loc[df['APN Number'] == APN].index.tolist()
              a = []
-             # print indices of all matches one by one
+             # #print indices of all matches one by one
              for i in indices:
                 if i / 100 < 1:
-                    print("Index: 1")
+                    #print("Index: 1")
+                    pass
                 else:
-                    print("Index:", round(i / 100))
+                    #print("Index:", round(i / 100))
                     a.append(round(i / 100))
 
              unique_numbers = []
              [unique_numbers.append(num) for num in a if num not in unique_numbers]
-             print(unique_numbers)
+             #print(unique_numbers)
 
              l = 1
              for k in unique_numbers:
