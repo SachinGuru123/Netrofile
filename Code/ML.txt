@@ -1,8 +1,0 @@
-
-Cookcounty_Tax is line no 206 (df_combined = df2.append(f)) to change to df2._append(f)
-new_update1_title is line no 356 (df_combined = df2.append(f)) to change to df2._append(f)
-new_update1_title is line no 398 (df_combined = df2.append(f)) to change to df2._append(f)
-new_update1_title is line no 488 (df_combined = df2.append(f)) to change to df2._append(f)
-new_update1_title is line no 534(df_combined = df2.append(f)) to change to df2._append(f)
-
-===========================================================
