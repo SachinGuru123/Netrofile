@@ -26,6 +26,7 @@ def triggerBot(newFiles: list):
     NetroSearch.main(newFiles)
 
 
+
 import time
 
 
