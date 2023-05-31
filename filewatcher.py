@@ -1,5 +1,6 @@
-import os
-import NetroSearch
+import os, shutil
+from Code import Cookcounty_Tax as cook
+import getOrders as orders
 
 watchDirectory = os.getcwd()+'\\Input'
 pollTime = 5 #in seconds
@@ -22,8 +23,12 @@ def listComparison(OriginalList: list, NewList: list):
 
 
 def triggerBot(newFiles: list):
-    print(f'I would automate order(s) {newFiles}')
-    NetroSearch.main(newFiles)
+    print(f'I would do things with file(s) {newFiles}')
+    for file in newFiles:
+        print("starting automation for file ", file)
+        cook.Final_UI(file)
+        shutil.move(os.getcwd() + '\\Input\\' + file, os.getcwd() + '\\Processed\\' + file)
+        time.sleep(2)
 
 
 
