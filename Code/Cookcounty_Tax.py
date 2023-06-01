@@ -1,5 +1,8 @@
+import shutil
 from datetime import datetime
 import http.client
+from zipfile import ZipFile
+
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -14,24 +17,20 @@ import openpyxl
 import Code.New_update1_title
 import Code.Lien_Report
 import Code.BRB_Search
-#import getOrders
+import getOrders
 import os
 from PyPDF2 import PdfMerger
 from selenium.common import NoSuchElementException
 
-def mergepdf(orderId):
-    source_dir=os.getcwd()+'\\Output\\COOK_COUNTY\\Order no '+orderId+'\\'
-    merger = PdfMerger()
-    try:
-        for item in os.listdir(source_dir):
-            if item.endswith('pdf'):
-                merger.append(source_dir + item)
 
-        merger.write(source_dir + 'Mergedpdf.pdf')
-    except Exception as e:
-        print("pdf could not be merged."+str(e))
 
-    merger.close()
+def createZipfile(orderId):
+    par_dir = os.path.dirname(os.getcwd())
+    # path to folder which needs to be zipped
+    directory = par_dir + '\\Output\\COOK_COUNTY\\Order No ' + str(orderId)
+    #zip the order output folder
+    shutil.make_archive(par_dir + '\\Output\\COOK_COUNTY\\Order', 'zip', directory)
+    print('All files zipped successfully!')
 
 def Final_UI(file):
 
@@ -41,7 +40,7 @@ def Final_UI(file):
 
  for i in range(E):
   try:
-    print(file)
+    #print(file)
     workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\'+file)
     worksheet = workbook.active
     start_time = datetime.now()
@@ -60,7 +59,7 @@ def Final_UI(file):
 
 
     OrderID=int(dataframe1['Order ID'][i])
-    #OrderNum=int(dataframe1['Order No'][i])
+    OrderNum=int(dataframe1['Order No'][i])
 
     City = str(dataframe1['City'][i])
    # CC=City.split()[-1]
@@ -213,12 +212,12 @@ def Final_UI(file):
         #for updating order status
         status="Completed"
         comments="Completed successfully"
-        mergepdf(OrderID)
+        createZipfile(OrderID)
         files = [
-            ('UploadFile',("Mergedpdf.pdf", open(os.getcwd() + '\\Output\\COOK_COUNTY\\'+str(OrderID)+'\\Mergedpdf.pdf','rb'), 'pdf'))
+            ('UploadFile',(str(OrderID)+".zip", open(os.getcwd() + '\\Output\\COOK_COUNTY\\'+str(OrderID)+".zip",'rb'), 'zip'))
         ]
 
-        #getOrders.uploadDocument(OrderID,OrderNum, status, comments, files)
+        getOrders.uploadDocument(OrderID,OrderNum, status, comments, files)
 
 
     except Exception as e:
@@ -226,13 +225,11 @@ def Final_UI(file):
         print("EXception : "+str(e))
         status = "Exception"
         comments = e
-        #getOrders.updateStatus(OrderID,OrderNum,status, comments)
+        getOrders.updateStatus(OrderID,OrderNum,status, comments)
         try:
             os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
         except Exception as e:
             print("Error : "+str(e))
-            status="Exception"
-            comments=e
 
         workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
         worksheet = workbook.active
@@ -244,7 +241,7 @@ def Final_UI(file):
   except Exception as e:
       status = "Exception"
       comments = e
-      #getOrders.updateStatus(orderId, status, comments)
+      getOrders.updateStatus(OrderID, status, comments)
       print(" Maximum Retry Error."+str(e))
 
 
@@ -256,5 +253,7 @@ def Final_UI(file):
 
 
 if __name__ == '__main__':
-    Final_UI()
+    par_dir = os.path.dirname(os.getcwd())
+    # path to folder which needs to be zipped
+
 
