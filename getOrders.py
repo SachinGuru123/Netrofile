@@ -6,17 +6,18 @@ import http.client
 
 #get orders from site
 def getOrder(county,state):
-    auth=(config_data['username'],config_data['passowrd'])
+    auth=(config_data['username'],config_data['password'])
     url = "http://168.61.208.48:8092/api/AutoSearch/GetSearchPending?state="+state+"&county="+county
     response = requests.get(url, auth=auth)
     data=response.json()
 
-    order_df = pd.DataFrame(data)
-
-    columns = ['Order No', 'APN', 'Property Address','Zip','State', 'County Name','City', 'NAME','Product Name']
+    order_df = pd.DataFrame(data,index=[0])
+    print(order_df)
+    columns = ['Order ID','Order No', 'Property Address','Zip','State', 'County Name','City', 'NAME','Product Name']
 
     order_df.columns=columns
     #adding column names
+    order_df.insert(2,"APN","",True)
     order_df.insert(8, "Second Name", "", True)
     order_df.insert(9, 'Start_time', "", True)
     order_df.insert(10, "End_time", "", True)
@@ -57,11 +58,11 @@ def getBotstatusID(botstats):
         return 0
 
 #update order status in site
-def updateStatus(orderID,botstats,comments):
+def updateStatus(orderID,OrderNum,botstats,comments):
     try:
         auth=(config_data['username'],config_data['password'])
         botStatusId=getBotstatusID(botstats) #get order status id
-        params = {"OrderId": orderID, "BotStatusID": botStatusId, "BotStatus": botstats, "Comments": comments}
+        params = {"OrderId": orderID,"OrderNo": OrderNum,"BotStatusID": botStatusId, "BotStatus": botstats, "Comments": comments}
         url="http://168.61.208.48:8092/api/AutoSearch/PostOrderBotStatus"
 
 
@@ -71,11 +72,11 @@ def updateStatus(orderID,botstats,comments):
     except Exception as e:
         print("status could not be updated "+str(e))
 
-def uploadDocument(orderID,botstats,comments,files):
+def uploadDocument(orderID,OrderNum,botstats,comments,files):
     try:
         auth = (config_data['username'], config_data['password'])
         botStatusId = getBotstatusID(botstats)  # get order status id
-        params={"OrderId":orderID,"BotstatusID":botStatusId,"Botstatus":botstats,"DocumentTypeID":31,"comments":comments}
+        params={"OrderId":orderID,"OrderNo": OrderNum,"BotstatusID":botStatusId,"Botstatus":botstats,"DocumentTypeID":31,"comments":comments}
 
 
         url="http://168.61.208.48:8092/api/AutoSearch/UploadSearchDocuments"
@@ -91,8 +92,8 @@ with open('config.json', 'r') as f:
 county=config_data['county']
 state=config_data['state']
 
-#getOrder(county,state)
-uploadDocument(1166519,"In Progress","testing")
+getOrder(county,state)
+#uploadDocument(1166519,"In Progress","testing")
 
 
 

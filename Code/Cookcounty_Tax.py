@@ -14,7 +14,7 @@ import openpyxl
 import Code.New_update1_title
 import Code.Lien_Report
 import Code.BRB_Search
-import getOrders
+#import getOrders
 import os
 from PyPDF2 import PdfMerger
 from selenium.common import NoSuchElementException
@@ -38,9 +38,10 @@ def Final_UI(file):
  dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine='openpyxl')
 
  E = dataframe1[dataframe1.columns[0]].count()
- orderId=""
+
  for i in range(E):
   try:
+    print(file)
     workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\'+file)
     worksheet = workbook.active
     start_time = datetime.now()
@@ -58,10 +59,11 @@ def Final_UI(file):
     STREETNAME=(" ".join(STREETNAME))
 
 
-    ORDERN=int(dataframe1['Order No'][i])
-    orderId = ORDERN         #to send order id to updatestatus API
+    OrderID=int(dataframe1['Order ID'][i])
+    #OrderNum=int(dataframe1['Order No'][i])
+
     City = str(dataframe1['City'][i])
-    CC=City.split()[-1]
+   # CC=City.split()[-1]
 
     PIN = (dataframe1['State'][i])
     PIN=PIN.split("-")[-1]
@@ -116,7 +118,7 @@ def Final_UI(file):
         text=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text
         #print(text)
 
-        os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
+        os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(OrderID)))
 
 
         workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
@@ -133,7 +135,7 @@ def Final_UI(file):
 
         driver.execute_script('window.print();')
         time.sleep(3)
-        path=os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+        path=os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(OrderID))
         name="Tax Sheet"
         pyautogui.FAILSAFE = False
         pyautogui.typewrite(path +'\\'+ name + '.pdf')
@@ -144,10 +146,10 @@ def Final_UI(file):
 
         Code.New_update1_title.Final_A(i)
 
-        Code.Lien_Report.Final_B(ORDERN,F,L,file)
+        Code.Lien_Report.Final_B(OrderID,F,L,file)
 
 
-        Code.BRB_Search.Final_C(ORDERN,F,L)
+        Code.BRB_Search.Final_C(OrderID,F,L)
 
         workbook1 = openpyxl.Workbook()
         sheet = workbook1.active
@@ -168,7 +170,7 @@ def Final_UI(file):
 
 
         #print("value of i is "+str(i))
-        Ordernumber = df['Order No'][i]
+        OrderIDumber = df['Order No'][i]
         BORROWERNAME = df['NAME'][i]
         ADDRESS = df['Property Address'][i]
 
@@ -180,7 +182,7 @@ def Final_UI(file):
 
         GIT = df['GTD'][i]
 
-        sheet['B1'] = Ordernumber
+        sheet['B1'] = OrderIDumber
         sheet['B2'] = BORROWERNAME
         sheet['B3'] = ADDRESS
         sheet['B4'] = COUNTY
@@ -193,15 +195,15 @@ def Final_UI(file):
         #sheet['C10']='INST NO'
         #sheet['D10']='BOOK-PAGE '
 
-        workbook1.save(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx')
+        workbook1.save(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\searchNote.xlsx')
 
-        df1 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
+        df1 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\filterd_data.xlsx',engine='openpyxl')
         f = df1[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
 
-        df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\searchNote.xlsx',engine='openpyxl')
+        df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\searchNote.xlsx',engine='openpyxl')
 
         df_combined = df2.append(f)
-        combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\FinalXL.xlsx'
+        combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\FinalXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
 
         end_time = datetime.now()
@@ -211,12 +213,12 @@ def Final_UI(file):
         #for updating order status
         status="Completed"
         comments="Completed successfully"
-        mergepdf(ORDERN)
+        mergepdf(OrderID)
         files = [
-            ('UploadFile',("Mergedpdf.pdf", open(os.getcwd() + '\\Output\\COOK_COUNTY\\'+str(orderId)+'\\Mergedpdf.pdf','rb'), 'pdf'))
+            ('UploadFile',("Mergedpdf.pdf", open(os.getcwd() + '\\Output\\COOK_COUNTY\\'+str(OrderID)+'\\Mergedpdf.pdf','rb'), 'pdf'))
         ]
 
-        getOrders.uploadDocument(orderId, status, comments, files)
+        #getOrders.uploadDocument(OrderID,OrderNum, status, comments, files)
 
 
     except Exception as e:
@@ -224,9 +226,9 @@ def Final_UI(file):
         print("EXception : "+str(e))
         status = "Exception"
         comments = e
-        getOrders.updateStatus(orderId, status, comments)
+        #getOrders.updateStatus(OrderID,OrderNum,status, comments)
         try:
-            os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
+            os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
         except Exception as e:
             print("Error : "+str(e))
             status="Exception"
@@ -242,7 +244,7 @@ def Final_UI(file):
   except Exception as e:
       status = "Exception"
       comments = e
-      getOrders.updateStatus(orderId, status, comments)
+      #getOrders.updateStatus(orderId, status, comments)
       print(" Maximum Retry Error."+str(e))
 
 
