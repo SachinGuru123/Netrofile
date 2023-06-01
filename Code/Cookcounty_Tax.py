@@ -45,7 +45,7 @@ def Final_UI(file):
     EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",'')).lower()
 
 
-    FName = (dataframe1['NAME'][0])
+    FName = (dataframe1['NAME'][i])
     F = FName.split()[0:1]
     L = FName.split()[-1]
 
