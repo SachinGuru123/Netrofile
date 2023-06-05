@@ -91,7 +91,9 @@ def Final_UI(file):
          driver.maximize_window()
          driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')  # opening Tax page
          # driver.maximize_window()
+
          print("Running Tax Page")
+
          elem = WebDriverWait(driver, 15).until(
              EC.presence_of_element_located(
                  (By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
