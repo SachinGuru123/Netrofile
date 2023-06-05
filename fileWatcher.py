@@ -1,6 +1,6 @@
 import os, shutil
 from Code import Cookcounty_Tax as cook
-
+import time
 
 watchDirectory = os.getcwd()+'\\Input'
 pollTime = 5 #in seconds
@@ -32,7 +32,6 @@ def triggerBot(newFiles: list):
 
 
 
-import time
 
 
 def fileWatcher(my_dir: str, pollTime: int):

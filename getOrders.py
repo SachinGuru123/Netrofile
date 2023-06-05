@@ -98,8 +98,3 @@ county=config_data['county']
 state=config_data['state']
 
 getOrder(county,state)
-
-
-#files = [('UploadFile',("1166519.zip", open(os.getcwd() + "\\Output\\COOK_COUNTY\\1166519.zip",'rb'),"zip"))]
-
-#uploadDocument(1166519,"IL20100927","In Progress","testing",files)
