@@ -1,6 +1,6 @@
 import os, shutil
 from Code import Cookcounty_Tax as cook
-#import getOrders as orders
+
 
 watchDirectory = os.getcwd()+'\\Input'
 pollTime = 5 #in seconds
@@ -24,7 +24,6 @@ def listComparison(OriginalList: list, NewList: list):
 
 def triggerBot(newFiles: list):
     print(f'Pending orders {newFiles}')
-    time.sleep(5)
     for file in newFiles:
         print("starting automation for file ", file)
         cook.Final_UI(file)

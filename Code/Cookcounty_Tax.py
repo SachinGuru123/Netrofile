@@ -1,34 +1,38 @@
 from datetime import datetime
-
+import os, shutil
 from selenium.common import NoSuchElementException
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import time
+import pandas as pd
+import shutil, os
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pyautogui
+import openpyxl
+import Code.New_update1_title
+import Code.Lien_Report
+import Code.BRB_Search
+import getOrders
 
+
+def createZipfile(orderId):
+    par_dir = os.getcwd()
+    # path to folder which needs to be zipped
+    directory = par_dir + '\\Output\\COOK_COUNTY\\Order No ' + str(orderId)
+    #zip the order output folder
+    shutil.make_archive(par_dir + '\\Output\\COOK_COUNTY\\Order', 'zip', directory)
+    print('All files zipped successfully!')
 
 def Final_UI(file):
- from selenium import webdriver
- from selenium.webdriver.chrome.service import Service
- from selenium.webdriver.common.by import By
- from selenium.webdriver.common.keys import Keys
- import time
- import pandas as pd
- import shutil, os
- from selenium.webdriver.chrome.options import Options
- from selenium.webdriver.support.ui import WebDriverWait
- from selenium.webdriver.support import expected_conditions as EC
- import pyautogui
 
- import openpyxl
- import Code.New_update1_title
- import Code.Lien_Report
- import Code.BRB_Search
- import os
-
-
-
- par_dir=os.path.dirname(os.getcwd())
+ par_dir=os.getcwd()
  time.sleep(1)
 
  dataframe1 = pd.read_excel(par_dir+'\\Input\\'+file,engine='openpyxl')
-
 
 
  E = dataframe1[dataframe1.columns[0]].count()
@@ -52,18 +56,18 @@ def Final_UI(file):
     STREETNAME=(" ".join(STREETNAME))
     #print(STREETNAME)
 
-    ORDERN=int(dataframe1['Order No'][i])
+    OrderID = int(dataframe1['Order ID'][i])
+    OrderNum = dataframe1['Order No'][i]
+    processId=int(dataframe1['Process ID'][i])
+
+    getOrders.updateStatus(OrderID, OrderNum, "In Progress",processId, "Automation started")
+
     City = str(dataframe1['City'][i])
     CC=City.split()[-1]
    # print(CC)
     PIN = (dataframe1['State'][i])
     PIN=PIN.split("-")[-1]
-    # print(PIN)
-    #
-    # print(str(ORDERN))
-    #
-    #
-    # print(EXCELADDRESS)
+
 
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
@@ -115,9 +119,8 @@ def Final_UI(file):
         text=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text
         #print(text)
 
-        os.makedirs(par_dir+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
+        os.makedirs(par_dir+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(OrderID)))
 
-        #print(par_dir+'\\Input\\'+file)
         workbook = openpyxl.load_workbook(par_dir+'\\Input\\'+file)
 
 
@@ -132,7 +135,7 @@ def Final_UI(file):
 
         driver.execute_script('window.print();')
         time.sleep(3)
-        path=par_dir+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+        path=par_dir+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(OrderID))
         name="Tax Sheet"
         #pyautogui.FAILSAFE = False
         pyautogui.typewrite(path +'\\'+ name + '.pdf')
@@ -146,7 +149,7 @@ def Final_UI(file):
         #Code.Lien_Report.Final_B(ORDERN,F,L,file)
 
 
-        Code.BRB_Search.Final_C(ORDERN,F,L)
+        Code.BRB_Search.Final_C(OrderID,F,L)
 
         workbook1 = openpyxl.Workbook()
         sheet = workbook1.active
@@ -194,36 +197,44 @@ def Final_UI(file):
         #sheet['C10']='INST NO'
         #sheet['D10']='BOOK-PAGE '
 
-        workbook1.save(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx')
+        workbook1.save(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\Note.xlsx')
 
-        df1 = pd.read_excel(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
+        df1 = pd.read_excel(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\filterd_data.xlsx',engine='openpyxl')
         f = df1[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
         #print(f)
 
-        df2 = pd.read_excel(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx',engine='openpyxl')
+        df2 = pd.read_excel(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\Note.xlsx',engine='openpyxl')
 
         df_combined = df2.append(f)
-        combinedfile = par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\SearchNoteXL.xlsx'
+        combinedfile = par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID))+'\\SearchNoteXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
         # workbook = openpyxl.load_workbook(par_dir + '\\Input\\'+file)
         # worksheet = workbook.active
         end_time = datetime.now()
         worksheet['k' + str(int(i + 2))] = end_time
         workbook.save(par_dir+'\\Input\\'+file)
-
-        source_folder = (par_dir + "\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
+         # for updating order status
+        #zipping the order output files
+        createZipfile(OrderID)
+        files = [
+            ('UploadFile',(str(OrderID) + ".zip", open(os.getcwd() + '\\Output\\COOK_COUNTY\\' + str(OrderID) + ".zip", 'rb'),
+                           'zip'))]
+        #uploading the zipped doc
+        getOrders.uploadDocument(OrderID, OrderNum, "Completed",processId, "Successful", files)
+        source_folder = (par_dir + "\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
         destination_folder = (par_dir + "\\Processed")
-
+        #moving output orders to processed folder
         shutil.move(source_folder, destination_folder)
         print("Completed:"+str(int(i)+int(1)))
 
 
-    except Exception:
-        print("Max Retry Error")
+    except Exception as e:
+        print("Max Retry Error",e)
+        getOrders.updateStatus(OrderID, OrderNum, "Exception" ,processId,e)
         try:
-            os.makedirs(par_dir+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
-        except Exception :
-            print("Error")
+            os.makedirs(par_dir+"\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
+        except Exception as e1:
+            print("Error",e1)
         workbook = openpyxl.load_workbook(par_dir+'\\Input\\'+file)
         worksheet = workbook.active
         worksheet['B' + str(int(i + 2))]='Maximum Retry Error'
@@ -233,13 +244,14 @@ def Final_UI(file):
 
         #print("Closed")
 
-  except Exception:
-        print(" Maximum Retry Error.")
+  except Exception as e:
+        print(" Maximum Retry Error.",e)
+        getOrders.updateStatus(OrderID, OrderNum, "Exception", processId,e)
 
 
 
 
-if __name__ == '__main__':
-    file="Cook_county.xlsx"
-    Final_UI(file)
+# if __name__ == '__main__':
+#     file="Cook_county.xlsx"
+#     Final_UI(file)
 
