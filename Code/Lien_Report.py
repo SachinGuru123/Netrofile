@@ -16,7 +16,8 @@ def Final_B(ORDERN,F,L,file):
     import glob
     import re,PyPDF2
 
-    dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file)
+    par_dir = os.path.dirname(os.getcwd())
+    dataframe1 = pd.read_excel(par_dir+'\\Input\\'+file)
     EXCELADDRESS = str(dataframe1['NAME'][0].replace("-",''))
     Firstname=(EXCELADDRESS.split()[0:1])
     Lastname=(EXCELADDRESS.split()[-1])
@@ -61,7 +62,7 @@ def Final_B(ORDERN,F,L,file):
 
     driver.execute_script('window.print();')
 
-    path=os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+    path=par_dir+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
 
     name="Lien_Report"
     time.sleep(3)

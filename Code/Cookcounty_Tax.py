@@ -22,59 +22,48 @@ def Final_UI(file):
  import Code.BRB_Search
  import os
 
+
+
+ par_dir=os.path.dirname(os.getcwd())
  time.sleep(1)
- dataframe1 = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine='openpyxl')
+
+ dataframe1 = pd.read_excel(par_dir+'\\Input\\'+file,engine='openpyxl')
 
 
- E = dataframe1[dataframe1.columns[0]].count() # to check no of rows in the order no column
+
+ E = dataframe1[dataframe1.columns[0]].count()
 
  for i in range(E):
   try:
-    workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\'+file)
+    workbook = openpyxl.load_workbook(par_dir + '\\Input\\'+file)
     worksheet = workbook.active
     start_time = datetime.now()
-
     worksheet['j' + str(int(i + 2))] = start_time
+    workbook.save(par_dir+'\\Input\\'+file)
+    EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",''))
 
-    workbook.save(os.getcwd()+'\\Input\\'+file)
-
-    EXCELADDRESS = str(dataframe1['Property Address'][i].replace("-",'')).lower()
-
-
-    FName = (dataframe1['NAME'][i])
+    FName = (dataframe1['NAME'][0])
     F = FName.split()[0:1]
     L = FName.split()[-1]
 
 
-
     HOUSENUMBER=(EXCELADDRESS.split()[0:1])
-    STREETNAME=(EXCELADDRESS.split()[1:3])
-
-    STREETNAME=(" ".join(STREETNAME)).lower()
-
-
-    if "avenue" in STREETNAME: # added to replace AVenue, AVENUE words and also to remove after the Avenue word
-        STREETNAME = STREETNAME.replace("avenue", "ave")
-        STREETNAME = STREETNAME.split("ave")
-        STREETNAME = STREETNAME[0]
-
-    elif "ave" in STREETNAME: # added to replace AVenue, AVENUE words and also to remove after the Avenue word
-
-        STREETNAME = STREETNAME.split("ave")
-        STREETNAME = STREETNAME[0]
-
-
-    print(STREETNAME)
-
+    STREETNAME=(EXCELADDRESS.split()[1:])
+    STREETNAME=(" ".join(STREETNAME))
+    #print(STREETNAME)
 
     ORDERN=int(dataframe1['Order No'][i])
     City = str(dataframe1['City'][i])
-
-    #CC=City.split()[-1]
-
-    PIN = str(dataframe1['Zip'][i])
-    #PIN=PIN.split("-")[-1]
-
+    CC=City.split()[-1]
+   # print(CC)
+    PIN = (dataframe1['State'][i])
+    PIN=PIN.split("-")[-1]
+    # print(PIN)
+    #
+    # print(str(ORDERN))
+    #
+    #
+    # print(EXCELADDRESS)
 
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
@@ -84,7 +73,7 @@ def Final_UI(file):
     driver = webdriver.Chrome(options=chrome_options)
     time.sleep(4)
     driver.maximize_window()
-    driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')# opening Tax page
+    driver.get('https://www.cookcountytreasurer.com/setsearchparameters.aspx')
     #driver.maximize_window()
     print("Running Tax Page")
     elem = WebDriverWait(driver, 15).until(
@@ -94,31 +83,22 @@ def Final_UI(file):
     time.sleep(2)
     elem = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH, "/html/body/form/div[4]/div[2]/div/div/div[2]/div/div/ul/li[3]/div/span")))
     time.sleep(2)
-    driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtStreetName"]').send_keys(STREETNAME)# passing Street name to driver
+    driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtStreetName"]').send_keys(STREETNAME)
     time.sleep(1)
-    driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtHouseNumber"]').send_keys(HOUSENUMBER)# passing House No  to driver
+    driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_ASPxPanel2_SearchByAddress1_txtHouseNumber"]').send_keys(HOUSENUMBER)
     time.sleep(1)
-    driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[11]/input').send_keys(PIN)# passing PIN to driver
+    driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[11]/input').send_keys(PIN)
     time.sleep(1)
-
-    if 'unit' in EXCELADDRESS: #if in property Address ,unit is present it will enter the Unit address in th driver
-        UNIT = str(EXCELADDRESS.split('unit')[-1])
-        print(UNIT)
-
-        driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[7]/input').send_keys(UNIT)
-
-
     driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[9]/div[1]/input').send_keys(City,Keys.ENTER)
 
-    TAXmaincondition=driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[1]/span').text
-
+    #AXmaincondition=driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[1]/span').text
 
 
     try:
-     if (TAXmaincondition) == 'Found one record matching your search criteria.': #checking for results
-
+     #if TAXmaincondition == 'Found one record matching your search criteria.':
+        #WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[2]/div[2]/div[2]/span')))
         time.sleep(4)
-        z=driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[2]/div[2]/div[2]/span').text # for checking elements in Tax page
+        z=driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[2]/div[2]/div[2]/span').text
         #print(text)
 
         z1 = (z).split()[0:2]
@@ -127,34 +107,34 @@ def Final_UI(file):
         Name = str(dataframe1['NAME'][i]).split()[0:2]
         Name1=(" ".join(Name))
         abc=10
+       # print("Looping")
 
 
+        #WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.XPATH,'/ html / body / form / div[4] / div[2] / div / div / div[3] / div / div / div[2] / div[1] / span'))) ==True:
         driver.find_element(By.XPATH,'/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[3]/a').click()
-        text=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text #for getting APN number from Tax page
+        text=driver.find_element(By.XPATH,'/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text
         #print(text)
 
-        os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
+        os.makedirs(par_dir+"\\Output\\COOK_COUNTY\\" + "Order No " + str(int(ORDERN)))
 
-
-        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
+        #print(par_dir+'\\Input\\'+file)
+        workbook = openpyxl.load_workbook(par_dir+'\\Input\\'+file)
 
 
         worksheet = workbook.active
         #print("access to excel sheet")
-
         worksheet['B' + str(int(i+2))] = text
-        worksheet['M1']='GTD'
-        worksheet['N1'] = 'Comments'
+        #worksheet['B' + str(int(i+2))] = text
 
 
-        workbook.save(os.getcwd()+'\\Input\\'+file)
+        workbook.save(par_dir+'\\Input\\'+file)
         #print("saving ")
 
-        driver.execute_script('window.print();') #taking print of Tax page
+        driver.execute_script('window.print();')
         time.sleep(3)
-        path=os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+        path=par_dir+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
         name="Tax Sheet"
-
+        #pyautogui.FAILSAFE = False
         pyautogui.typewrite(path +'\\'+ name + '.pdf')
         time.sleep(2)
         pyautogui.press('enter')
@@ -170,7 +150,7 @@ def Final_UI(file):
 
         workbook1 = openpyxl.Workbook()
         sheet = workbook1.active
-        #below arrangement of rows for to get search note
+
         sheet['A1'] = 'Order Number:'
         sheet['A2'] = 'BORROWER NAME:'
         sheet['A3'] = 'ADDRESS:'
@@ -180,24 +160,25 @@ def Final_UI(file):
         sheet['A7'] = 'GTD:'
         sheet['A8'] = 'NAMES RUN:'
         sheet['A9'] = '###################################################################################'
-
+        #sheet['A10']='DOC ID '
         print("reading excel sheet")
-        df = pd.read_excel(os.getcwd()+'\\Input\\'+file,engine="openpyxl")
+        df = pd.read_excel(par_dir+'\\Input\\'+file,engine="openpyxl")
 
 
-
+        #print(df['Order No'])
+        #print("value of i is "+str(i))
         Ordernumber = df['Order No'][i]
-
+        #print(Ordernumber)
         BORROWERNAME = df['NAME'][i]
-
+        #print(BORROWERNAME)
         ADDRESS = df['Property Address'][i]
-
+        #print(ADDRESS)
         COUNTY = df['County Name'][i]
-
+        #print(COUNTY)
         APN = df['APN'][i]
-
+        #print(APN)
         NAMESRUN1 = df['NAME'][i]
-
+        #print(NAMESRUN1)
         GIT = df['GTD'][i]
 
         sheet['B1'] = Ordernumber
@@ -209,76 +190,44 @@ def Final_UI(file):
         sheet['B7']=GIT
         sheet['B8'] = NAMESRUN1
         sheet['B9']="#############"
+        #sheet['B10'] ='REC DATE'
+        #sheet['C10']='INST NO'
+        #sheet['D10']='BOOK-PAGE '
 
-        time.sleep(2)
-        workbook1.save(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx')
+        workbook1.save(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx')
 
-        df1 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
+        df1 = pd.read_excel(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\filterd_data.xlsx',engine='openpyxl')
         f = df1[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
+        #print(f)
 
+        df2 = pd.read_excel(par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx',engine='openpyxl')
 
-        df2 = pd.read_excel(os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\Note.xlsx',engine='openpyxl')
-
-        df_combined = df2._append(f)
-        combinedfile = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN)) + '\\SearchNoteXL.xlsx'
+        df_combined = df2.append(f)
+        combinedfile = par_dir+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\SearchNoteXL.xlsx'
         df_combined.to_excel(combinedfile, index=False)
-        '''
- ########################################       ###############
-        df3 = pd.read_excel(
-            os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN)) + '\\LeinDocFN.xlsx',
-            engine='openpyxl')
-        f3 = df3[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
-        df_combined = df3._append(f3)
-        combinedfile = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN)) + '\\SearchNoteXL.xlsx'
-        df_combined.to_excel(combinedfile, index=False)
-
-        df4 = pd.read_excel(
-            os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN)) + '\\LeinDocSN.xlsx',
-            engine='openpyxl')
-        f4 = df4[['Doc Number', 'Doc Type', 'Doc Executed', '1st PIN']]
-        df_combined = df4._append(f4)
-        combinedfile = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN)) + '\\SearchNoteXL.xlsx'
-        df_combined.to_excel(combinedfile, index=False)
-
-###########################################################
-'''
-        #combinedfile = os.getcwd()+'\\Output\\COOK_COUNTY\\' + "Order No " + str(int(ORDERN))+'\\SearchNoteXL.xlsx'
-        #df_combined.to_excel(combinedfile, index=False)
-
+        # workbook = openpyxl.load_workbook(par_dir + '\\Input\\'+file)
+        # worksheet = workbook.active
         end_time = datetime.now()
         worksheet['k' + str(int(i + 2))] = end_time
-        workbook.save(os.getcwd()+'\\Input\\'+file)
+        workbook.save(par_dir+'\\Input\\'+file)
 
-        source_folder = (os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
-        destination_folder = (os.getcwd() + "\\Processed")
+        source_folder = (par_dir + "\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
+        destination_folder = (par_dir + "\\Processed")
 
         shutil.move(source_folder, destination_folder)
         print("Completed:"+str(int(i)+int(1)))
 
-     else:
-         driver.close()
-         try:
-             os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
-         except Exception:
-             print("Error")
-         workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
-         worksheet = workbook.active
-         worksheet['N1']='Comments'
-         worksheet['N' + str(int(i + 2))] = 'Multiple Property Available'
-         workbook.save(os.getcwd() + '\\Input\\' + file)
-
 
     except Exception:
-        print("Max Retry Error in Tax Page")
-
+        print("Max Retry Error")
         try:
-            os.makedirs(os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
+            os.makedirs(par_dir+"\\Output\\COOK_COUNTY\\" + "Order No " + str(ORDERN))
         except Exception :
             print("Error")
-        workbook = openpyxl.load_workbook(os.getcwd()+'\\Input\\'+file)
+        workbook = openpyxl.load_workbook(par_dir+'\\Input\\'+file)
         worksheet = workbook.active
-        worksheet['B' + str(int(i + 2))]='Max Retry Error in Tax Page/ Recorder Page'
-        workbook.save(os.getcwd()+'\\Input\\'+file)
+        worksheet['B' + str(int(i + 2))]='Maximum Retry Error'
+        workbook.save(par_dir+'\\Input\\'+file)
         driver.close()
 
 
@@ -290,7 +239,7 @@ def Final_UI(file):
 
 
 
-
 if __name__ == '__main__':
-    Final_UI()
+    file="Cook_county.xlsx"
+    Final_UI(file)
 

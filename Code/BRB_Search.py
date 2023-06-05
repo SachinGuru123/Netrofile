@@ -20,6 +20,7 @@ def  Final_C(ORDERN,F,L):
 
     time.sleep(1)
     print("Running BRB Search")
+
     chrome_options = Options()
     chrome_options.add_argument('--kiosk-printing')
     chrome_options.add_argument('--disable-extensions')
@@ -38,8 +39,8 @@ def  Final_C(ORDERN,F,L):
     driver.find_element(By.XPATH,'/html/body/form/div[3]/section/div/div/div/div/div[2]/div[3]/div/div[2]/div[1]/div[2]/input').send_keys(L,Keys.ENTER)
 
     driver.execute_script('window.print();')
-
-    path = os.getcwd()+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
+    par_dir = os.path.dirname(os.getcwd())
+    path = par_dir+"\\Output\\COOK_COUNTY\\" + "Order No "+str(int(ORDERN))
 
     name = "BRB Search"
     time.sleep(4)
