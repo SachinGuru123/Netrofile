@@ -24,7 +24,7 @@ def createZipfile(orderId):
     # path to folder which needs to be zipped
     directory = par_dir + '\\Output\\COOK_COUNTY\\Order No ' + str(orderId)
     #zip the order output folder
-    shutil.make_archive(par_dir + '\\Output\\COOK_COUNTY\\Order', 'zip', directory)
+    shutil.make_archive(par_dir + '\\Output\\COOK_COUNTY\\'+str(orderId), 'zip', directory)
     print('All files zipped successfully!')
 
 def Final_UI(file):
@@ -38,13 +38,13 @@ def Final_UI(file):
  E = dataframe1[dataframe1.columns[0]].count()
 
  for i in range(E):
-     #try:
-         print(os.getcwd())
+     try:
+         #print(os.getcwd())
          workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
          worksheet = workbook.active
          start_time = datetime.now()
 
-         worksheet['j' + str(int(i + 2))] = start_time
+         worksheet['k' + str(int(i + 2))] = start_time
 
          workbook.save(os.getcwd() + '\\Input\\' + file)
 
@@ -119,7 +119,7 @@ def Final_UI(file):
 
          if 'unit' in EXCELADDRESS:  # if in property Address ,unit is present it will enter the Unit address in th driver
              UNIT = str(EXCELADDRESS.split('unit')[-1])
-             print(UNIT)
+             #print(UNIT)
 
              driver.find_element(By.XPATH,
                                  '/html/body/form/div[4]/div[2]/div/div/div[3]/div/div[1]/div[2]/div[7]/input').send_keys(
@@ -151,10 +151,11 @@ def Final_UI(file):
                                      '/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[3]/a').click()
                  text = driver.find_element(By.XPATH,
                                             '/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text  # for getting APN number from Tax page
-                 print(text)
+                 #print(text)
 
-                 os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(OrderID)))
-                 print(os.getcwd())
+
+                 os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(OrderID)),exist_ok=True)
+                 #print(os.getcwd())
                  workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
 
                  worksheet = workbook.active
@@ -237,24 +238,26 @@ def Final_UI(file):
                      os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(OrderID)) + '\\Note.xlsx',
                      engine='openpyxl')
 
-                 df_combined = df2._append(f)
+                 df_combined = df2.append(f)
                  combinedfile = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(
                      int(OrderID)) + '\\SearchNoteXL.xlsx'
                  df_combined.to_excel(combinedfile, index=False)
 
 
                  end_time = datetime.now()
-                 worksheet['k' + str(int(i + 2))] = end_time
+                 worksheet['l' + str(int(i + 2))] = end_time
                  workbook.save(os.getcwd() + '\\Input\\' + file)
 
                  # zipping the order output files
                  createZipfile(OrderID)
+
                  files = [
                      ('UploadFile', (
                      str(OrderID) + ".zip", open(os.getcwd() + '\\Output\\COOK_COUNTY\\' + str(OrderID) + ".zip", 'rb'),
                      'zip'))]
                  # uploading the zipped doc
                  getOrders.uploadDocument(OrderID, OrderNum, "Completed", processId, "Successful", files)
+
                  source_folder = (os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
                  destination_folder = (os.getcwd() + "\\Processed")
 
@@ -264,14 +267,15 @@ def Final_UI(file):
              else:
                  driver.close()
                  try:
-                     os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
-                 except Exception:
-                     print("Error")
+                     os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID),exist_ok=True)
+                 except Exception as e1:
+                     print("Error",e1)
                  workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
                  worksheet = workbook.active
                  worksheet['P1'] = 'Comments'
                  worksheet['P' + str(int(i + 2))] = 'Multiple Property Available'
                  workbook.save(os.getcwd() + '\\Input\\' + file)
+                 getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, 'Multiple Property Available')
 
 
          except Exception as e:
@@ -279,9 +283,9 @@ def Final_UI(file):
              getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, e)
 
              try:
-                 os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID))
-             except Exception:
-                 print("Error")
+                 os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(OrderID),exist_ok=True)
+             except Exception as e1:
+                 print("Error",e1)
              workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
              worksheet = workbook.active
              worksheet['C' + str(int(i + 2))] = 'Max Retry Error in Tax Page/ Recorder Page'
@@ -290,11 +294,8 @@ def Final_UI(file):
          #
          #     # print("Closed")
 
-     # except Exception as e:
-     #     print(" Maximum Retry Error.",e)
-     #     getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, e)
+     except Exception as e:
+         print(" Maximum Retry Error.",e)
+         getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, e)
 
-# if __name__ == '__main__':
-#     file="Cook_county.xlsx"
-#     Final_UI(file)
 

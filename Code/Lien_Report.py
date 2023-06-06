@@ -22,8 +22,8 @@ def Final_B(ORDERN,F,L,file):
     Firstname=(EXCELADDRESS.split()[0:1])
     Lastname=(EXCELADDRESS.split()[-1])
     # ORDERN=(dataframe1['Order No'][0])#.replace("-",''))
-    print(Lastname)
-    print(Firstname)
+    # print(Lastname)
+    # print(Firstname)
     County='CooK'
 
     #try:
