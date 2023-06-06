@@ -1,5 +1,4 @@
 from selenium.common import NoSuchElementException
-import datetime
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -21,13 +20,13 @@ import re, PyPDF2
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 import math
 
 def Final_A(i,file):
 
     time.sleep(1)
-    par_dir = os.path.dirname(os.getcwd())
+    par_dir = os.getcwd()
     dataframe1 = pd.read_excel(par_dir+'\\Input\\'+file)
     
 
@@ -49,7 +48,7 @@ def Final_A(i,file):
         # print(splitted_name)
         # print(ab)
         ############################################################################
-        EXCELORDERNO = int(dataframe1['Order No'][i])  # getting Order No
+        EXCELORDERNO = dataframe1['Order ID'][i]  # getting Order No
     
         chrome_driver = 'chromedriver_win32\chromedriver.exe'
         time.sleep(1)
@@ -106,7 +105,7 @@ def Final_A(i,file):
         k = 1  # for DOC counting Reference
     
         df.to_excel(
-            os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx',
+            os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + '\\Name Results.xlsx',
             index=False)
         workbook.save(os.getcwd() + '\\Input\\' + file)
     
@@ -140,7 +139,7 @@ def Final_A(i,file):
                     r = requests.get(LinkF)
                     time.sleep(1)
     
-                    with open('Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO))
+                    with open('Output\\COOK_COUNTY\\' + "Order No " + str(EXCELORDERNO)
                               + '\\Doc' + str(N) + '   ' + str(d) + '.pdf', 'wb') as fd:
                         for chunk in r.iter_content(chunk_size=40):
                             fd.write(chunk)
@@ -163,12 +162,12 @@ def Final_A(i,file):
         aa = driver.find_element(By.XPATH, '//table')
         df1 = pd.read_html(aa.get_attribute('outerHTML'))[0]
         df1.to_excel(
-            os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\APN Results.xlsx',
+            os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + '\\APN Results.xlsx',
             index=False)  # to save APN page Tabular Data
     
         ########################################################################
         workbook = openpyxl.load_workbook(
-            os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\APN Results.xlsx')
+            os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + '\\APN Results.xlsx')
         worksheet = workbook.active
     
     DocCOunt = driver.find_element(By.XPATH, '//*[@id="result"]/div[1]/div/span').text
@@ -183,28 +182,28 @@ def Final_A(i,file):
         worksheet['K' + str(int(j + 1))] = href_ad
         j += 1
     
-    workbook.save(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + '\\APN Results.xlsx')
+    workbook.save(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + '\\APN Results.xlsx')
     
     #########################################################################
     df2 = pd.read_excel(
-        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx')
+        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(EXCELORDERNO) + '\\Name Results.xlsx')
     lastdate = (df2['Doc Recorded'].iloc[-1])
     
     data_frame = pd.read_excel(
-        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO)) + '\\APN Results.xlsx')
+        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(EXCELORDERNO) + '\\APN Results.xlsx')
     
     data_frame['Doc Recorded'] = pd.to_datetime(data_frame['Doc Recorded'], format='%m/%d/%Y')
     
     filterd_data = data_frame[data_frame['Doc Recorded'] >= lastdate]
     
     filterd_data.to_excel(
-        os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + "\\filterd_data.xlsx",
+        os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + "\\filterd_data.xlsx",
         index=False)
     
     df2 = pd.read_excel(
-        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO)) + '\\Name Results.xlsx')
+        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(EXCELORDERNO) + '\\Name Results.xlsx')
     df3 = pd.read_excel(
-        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(int(EXCELORDERNO)) + '\\filterd_data.xlsx')
+        os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(EXCELORDERNO) + '\\filterd_data.xlsx')
     
     col1 = df2['Doc Number']
     col2 = df3['Doc Number']
@@ -239,7 +238,7 @@ def Final_A(i,file):
     combined_df = pd.concat([df2, df3])
     duplicated_df = combined_df.drop_duplicates(subset=column_to_compare)
     duplicated_df.to_excel(
-        os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO)) + "\\filterd_data1.xlsx",
+        os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + "\\filterd_data1.xlsx",
         index=False)
     
     url_list = duplicated_df['Unnamed: 10'].to_list()
@@ -262,7 +261,7 @@ def Final_A(i,file):
                 time.sleep(2)  # verify=False
                 with open(
                         os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(
-                            int(EXCELORDERNO))
+                            EXCELORDERNO)
                         + '\\APN Doc' + " " + str(int(Doc_num_APN_PAGE)) + " " + '.pdf', 'wb') as f:
                     for chunk in r.iter_content(chunk_size=40):
                         f.write(chunk)
@@ -314,7 +313,7 @@ def Final_A(i,file):
             time.sleep(2)
             a = driver.find_element(By.XPATH, '//table')
             df = pd.read_html(a.get_attribute('outerHTML'))[0]
-            df1 = df1._append(df)
+            df1 = df1.append(df)
             time.sleep(2)
             r = requests.get(qq)
             time.sleep(2)
@@ -355,7 +354,7 @@ def Final_A(i,file):
                 table = soup.find('table')
                 df = pd.read_html(str(table))[0]
                 # print(df)
-                df1 = df1._append(df)
+                df1 = df1.append(df)
                 # print(df1)
     
                 j += 1
@@ -391,7 +390,7 @@ def Final_A(i,file):
                 time.sleep(5)
                 pyautogui.press('enter')
                 path = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(
-                    int(EXCELORDERNO)) + '\\SecondName Search' + str(l) + '.pdf'
+                    EXCELORDERNO) + '\\SecondName Search' + str(l) + '.pdf'
                 pyautogui.typewrite(path)
     
                 pyautogui.press('enter')
@@ -413,13 +412,13 @@ def Final_A(i,file):
             print(Effective_Date)
             print("line 440")
     
-            STATE_LEIN_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
-            FED_TAX_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
-            UCC_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 5)  # Qualifying Date For UCC
-            JDG_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
-            HOA_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 5)  ##Qualifying Date For HOA
+            STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
+            FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
+            UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
+            JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
+            HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
             print("line 446")
-    
+            print(df)
             df['Doc Recorded'] = pd.to_datetime(df['Doc Recorded'], format='%m/%d/%Y')
             print("line 458")
             Liens = df['Doc Type'].str.contains('JUDGMENT|LIEN|STATE LIEN|FEDERAL LIEN|UCC|HOA',
@@ -501,13 +500,13 @@ def Final_A(i,file):
             df1 = pd.read_html(secNameExtraction.get_attribute('outerHTML'))[0]
             df1.to_excel(
                 os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
-                    int(EXCELORDERNO)) + '\\DataExtraction1.xlsx',
+                    EXCELORDERNO) + '\\DataExtraction1.xlsx',
                 index=False)  # to save Second Name Tabular Data
     
             # Below condition is used to take print of page in which Doc number is less than 100
             driver.execute_script('window.print();')
             time.sleep(5)
-            path = os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
+            path = os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
             name = "Full_Name_search_Index2"
             # pyautogui.FAILSAFE = False
             pyautogui.typewrite(path + '\\' + name + '.pdf')
@@ -530,11 +529,11 @@ def Final_A(i,file):
             print(Effective_Date)
             print("line 564")
     
-            STATE_LEIN_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
-            FED_TAX_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
-            UCC_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 5)  # Qualifying Date For UCC
-            JDG_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
-            HOA_DATE = Effective_Date - datetime.datetime.timedelta(days=365 * 5)  ##Qualifying Date For HOA
+            STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
+            FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
+            UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
+            JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
+            HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
             print("line 571")
     
             df1['Doc Recorded'] = pd.to_datetime(df1['Doc Recorded'], format='%m/%d/%Y')
@@ -645,7 +644,7 @@ def Final_A(i,file):
         a = driver.find_element(By.XPATH, '//table')
         df = pd.read_html(a.get_attribute('outerHTML'))[0]
         # print(df)
-        df1 = df1._append(df)
+        df1 = df1.append(df)
         # df1= df1.append(df)
     
         r = requests.get(qq)
@@ -691,7 +690,7 @@ def Final_A(i,file):
             df = pd.read_html(str(table))[0]
             time.sleep(1)
             # print(df)
-            df1 = df1._append(df)
+            df1 = df1.append(df)
             # print(df1)
     
             j += 1
@@ -731,7 +730,7 @@ def Final_A(i,file):
             time.sleep(5)
             pyautogui.press('enter')
             path = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(
-                int(EXCELORDERNO)) + '\\Name Search' + str(l) + '.pdf'
+                EXCELORDERNO) + '\\Name Search' + str(l) + '.pdf'
             pyautogui.typewrite(path)
     
             pyautogui.press('enter')
@@ -753,11 +752,11 @@ def Final_A(i,file):
         print(Effective_Date)
         print("line 788")
     
-        STATE_LEIN_DATE = Effective_Date - datetime.timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
-        FED_TAX_DATE = Effective_Date - datetime.timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
-        UCC_DATE = Effective_Date - datetime.timedelta(days=365 * 5)  # Qualifying Date For UCC
-        JDG_DATE = Effective_Date - datetime.timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
-        HOA_DATE = Effective_Date - datetime.timedelta(days=365 * 5)  ##Qualifying Date For HOA
+        STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
+        FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
+        UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
+        JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
+        HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
         print("line 795")
         time.sleep(2)
         df['Doc Recorded'] = pd.to_datetime(df['Doc Recorded'], format='%m/%d/%Y')
@@ -847,12 +846,12 @@ def Final_A(i,file):
     
         df1.to_excel(
             os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
-                int(EXCELORDERNO)) + '\\DataExtraction.xlsx',
+                EXCELORDERNO) + '\\DataExtraction.xlsx',
             index=False)  # to save First Name Tabular Data
         # print("Line 877")
         driver.execute_script('window.print();')
         time.sleep(5)
-        path = os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(EXCELORDERNO))
+        path = os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO)
         name = "Full_Name_search_Index"
         pyautogui.FAILSAFE = False
         pyautogui.typewrite(path + '\\' + name + '.pdf')
@@ -875,11 +874,11 @@ def Final_A(i,file):
         # print(Effective_Date)
         # print("line 911")
     
-        STATE_LEIN_DATE = Effective_Date - datetime.timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
-        FED_TAX_DATE = Effective_Date - datetime.timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
-        UCC_DATE = Effective_Date - datetime.timedelta(days=365 * 5)  # Qualifying Date For UCC
-        JDG_DATE = Effective_Date - datetime.timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
-        HOA_DATE = Effective_Date - datetime.timedelta(days=365 * 5)  ##Qualifying Date For HOA
+        STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
+        FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
+        UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
+        JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
+        HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
         # print("line 918")
     
         df1['Doc Recorded'] = pd.to_datetime(df1['Doc Recorded'], format='%m/%d/%Y')

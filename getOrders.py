@@ -6,7 +6,7 @@ import http.client
 
 #get orders from site
 def getOrder(county,state):
-    try:
+    #try:
 
         auth=(config_data['username'],config_data['password'])
         url = "http://168.61.208.48:8092/api/AutoSearch/GetSearchPending?state="+state+"&county="+county
@@ -14,7 +14,7 @@ def getOrder(county,state):
         data=response.json()
 
         order_df = pd.DataFrame(data)
-        #print(order_df)
+        print(order_df)
         columns = ['Order ID','Order No', 'Property Address','Zip','State', 'County Name','City', 'NAME','Product Name','Process ID']
 
         order_df.columns=columns
@@ -23,6 +23,7 @@ def getOrder(county,state):
         order_df.insert(9, "Second Name", "", True)
         order_df.insert(10, 'Start_time', "", True)
         order_df.insert(11, "End_time", "", True)
+
 
         rows_count = len(order_df.index) #total number of rows
 
@@ -44,9 +45,9 @@ def getOrder(county,state):
         now=datetime.now()
         filepath=os.getcwd() + '\\Input\\Order_' + str(now.strftime("%m-%d-%Y_%H-%M-%S"))
         order_df.to_excel(filepath+ '.xlsx', index=False)
-        print("Orders gfetched for automation")
-    except Exception as e:
-        print("Could not get orders from Smartprop ",e)
+        print("Orders fetched for automation")
+    # except Exception as e:
+    #     print("Could not get orders from Smartprop ",e)
 
 #get order status id
 def getBotstatusID(botstats):
@@ -97,4 +98,4 @@ with open('config.json', 'r') as f:
 county=config_data['county']
 state=config_data['state']
 
-getOrder(county,state)
+#getOrder(county,state)

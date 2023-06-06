@@ -23,6 +23,7 @@ def listComparison(OriginalList: list, NewList: list):
 
 
 def triggerBot(newFiles: list):
+
     print(f'Pending orders {newFiles}')
     for file in newFiles:
         print("starting automation for file ", file)
@@ -35,11 +36,12 @@ def triggerBot(newFiles: list):
 
 
 def fileWatcher(my_dir: str, pollTime: int):
+
     while True:
         if 'watching' not in locals():  # Check if this is the first time the function has run
             previousFileList = fileInDirectory(watchDirectory)
             watching = 1
-
+        print("waiting for orders")
         time.sleep(pollTime)
 
         newFileList = fileInDirectory(watchDirectory)

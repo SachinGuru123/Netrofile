@@ -38,7 +38,8 @@ def Final_UI(file):
  E = dataframe1[dataframe1.columns[0]].count()
 
  for i in range(E):
-     try:
+     #try:
+         print(os.getcwd())
          workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
          worksheet = workbook.active
          start_time = datetime.now()
@@ -150,18 +151,18 @@ def Final_UI(file):
                                      '/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[3]/a').click()
                  text = driver.find_element(By.XPATH,
                                             '/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text  # for getting APN number from Tax page
-                 # print(text)
+                 print(text)
 
                  os.makedirs(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(int(OrderID)))
-
+                 print(os.getcwd())
                  workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
 
                  worksheet = workbook.active
                  # print("access to excel sheet")
 
                  worksheet['C' + str(int(i + 2))] = text
-                 worksheet['M1'] = 'GTD'
-                 worksheet['N1'] = 'Comments'
+                 worksheet['O1'] = 'GTD'
+                 worksheet['P1'] = 'Comments'
 
                  workbook.save(os.getcwd() + '\\Input\\' + file)
                  # print("saving ")
@@ -268,8 +269,8 @@ def Final_UI(file):
                      print("Error")
                  workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
                  worksheet = workbook.active
-                 worksheet['N1'] = 'Comments'
-                 worksheet['N' + str(int(i + 2))] = 'Multiple Property Available'
+                 worksheet['P1'] = 'Comments'
+                 worksheet['P' + str(int(i + 2))] = 'Multiple Property Available'
                  workbook.save(os.getcwd() + '\\Input\\' + file)
 
 
@@ -283,15 +284,15 @@ def Final_UI(file):
                  print("Error")
              workbook = openpyxl.load_workbook(os.getcwd() + '\\Input\\' + file)
              worksheet = workbook.active
-             worksheet['B' + str(int(i + 2))] = 'Max Retry Error in Tax Page/ Recorder Page'
+             worksheet['C' + str(int(i + 2))] = 'Max Retry Error in Tax Page/ Recorder Page'
              workbook.save(os.getcwd() + '\\Input\\' + file)
              driver.close()
+         #
+         #     # print("Closed")
 
-             # print("Closed")
-
-     except Exception as e:
-         print(" Maximum Retry Error.",e)
-         getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, e)
+     # except Exception as e:
+     #     print(" Maximum Retry Error.",e)
+     #     getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, e)
 
 # if __name__ == '__main__':
 #     file="Cook_county.xlsx"
