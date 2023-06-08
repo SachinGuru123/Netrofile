@@ -94,8 +94,4 @@ def uploadDocument(orderID,OrderNum,botstats,processId,comments,files):
 with open('config.json', 'r') as f:
     config_data = json.load(f)
 
-county=config_data['county']
-state=config_data['state']
-getOrder(county, state)
-
 

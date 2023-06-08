@@ -1,4 +1,7 @@
+import json
 import os, shutil
+
+import getOrders
 from Code import Cookcounty_Tax as cook
 import time
 
@@ -37,12 +40,18 @@ def triggerBot(newFiles: list):
 
 def fileWatcher(my_dir: str, pollTime: int):
 
+
+    county = getOrders.config_data['county']
+    state = getOrders.config_data['state']
+
     while True:
         if 'watching' not in locals():  # Check if this is the first time the function has run
             previousFileList = fileInDirectory(watchDirectory)
             watching = 1
         print("waiting for orders")
         time.sleep(pollTime)
+
+        getOrders.getOrder(county,state)
 
         newFileList = fileInDirectory(watchDirectory)
 
@@ -51,6 +60,7 @@ def fileWatcher(my_dir: str, pollTime: int):
         previousFileList = newFileList
         if len(fileDiff) == 0: continue
         triggerBot(fileDiff)
+
 
 
 fileWatcher(watchDirectory, pollTime)
