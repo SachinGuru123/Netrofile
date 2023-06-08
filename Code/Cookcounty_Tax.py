@@ -69,6 +69,19 @@ def Final_UI(file):
              STREETNAME = STREETNAME.split("ave")
              STREETNAME = STREETNAME[0]
 
+         if "drive" in STREETNAME:  # added to replace AVenue, AVENUE words and also to remove after the Avenue word
+             STREETNAME = STREETNAME.replace("drive", "dr")
+             STREETNAME = STREETNAME.split("dr")
+             STREETNAME = STREETNAME[0]
+
+         if "south" in STREETNAME:  # added to replace AVenue, AVENUE words and also to remove after the Avenue word
+             STREETNAME = STREETNAME.replace("south", "")
+             # STREETNAME = STREETNAME[0]
+
+         if "north" in STREETNAME:  # added to replace AVenue, AVENUE words and also to remove after the Avenue word
+             STREETNAME = STREETNAME.replace("north", "")
+             #STREETNAME = STREETNAME[0]
+
          # print(STREETNAME)
 
          OrderID = int(dataframe1['Order ID'][i])
@@ -149,8 +162,9 @@ def Final_UI(file):
 
                  driver.find_element(By.XPATH,
                                      '/html/body/form/div[4]/div[2]/div/div/div[3]/div/div/div[2]/div[2]/table/tbody/tr[2]/td/div/div[2]/div[3]/a').click()
-                 text = driver.find_element(By.XPATH,
-                                            '/html/body/form/div[4]/div/div/div/div[2]/div[4]/div[1]/div[2]/div/div[2]/span').text  # for getting APN number from Tax page
+
+                 text=driver.find_element(By.XPATH,'//*[@id="ContentPlaceHolder1_OverviewDataResultsSummary1_OverviewSectionHeader1_lblPIN"]').text  # for getting APN number from Tax page
+
                  #print(text)
 
 
@@ -297,5 +311,3 @@ def Final_UI(file):
      except Exception as e:
          print(" Maximum Retry Error.",e)
          getOrders.updateStatus(OrderID, OrderNum, "Exception", processId, e)
-
-
