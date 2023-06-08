@@ -123,6 +123,8 @@ def Final_A(i, file):
             driver.get(k)
             WebDriverWait(driver, 15).until(EC.presence_of_element_located(
                 (By.XPATH, '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a')))
+            Doc_name1 = driver.find_element(By.XPATH,
+                                            '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[1]/div[1]/table/tbody/tr[2]/td').text
             d = driver.find_element(By.XPATH,
                                     '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[1]/div[1]/table/tbody/tr[1]/td').text
             LinkF = driver.find_element(By.XPATH,
@@ -138,7 +140,7 @@ def Final_A(i, file):
                     time.sleep(1)
 
                     with open('Output\\COOK_COUNTY\\' + "Order No " + str(EXCELORDERNO)
-                              + '\\Doc' + str(N) + '   ' + str(d) + '.pdf', 'wb') as fd:
+                              + '\\' + str(d) + " " + str(Doc_name1) + '.pdf', 'wb') as fd:
                         for chunk in r.iter_content(chunk_size=40):
                             fd.write(chunk)
 
@@ -245,7 +247,8 @@ def Final_A(i, file):
     for url in url_list:  # for downloading the Docs in APN page which met the given condtions
         driver.get(url)
         Doc_num_APN_PAGE = driver.find_element(By.XPATH, '//*[@id="divcol1"]/div[1]/table/tbody/tr[1]/td').text
-
+        Doc_name2 = driver.find_element(By.XPATH,
+                                        '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[1]/div[1]/table/tbody/tr[2]/td').text
         url = driver.find_element(By.XPATH,
                                   '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
             'href')  # to get final href link to downlad pdf document
@@ -260,7 +263,7 @@ def Final_A(i, file):
                 with open(
                         os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(
                             EXCELORDERNO)
-                        + '\\APN Doc' + " " + str(int(Doc_num_APN_PAGE)) + " " + '.pdf', 'wb') as f:
+                        + '\\' + str(int(Doc_num_APN_PAGE)) + " " + str(Doc_name2) + '.pdf', 'wb') as f:
                     for chunk in r.iter_content(chunk_size=40):
                         f.write(chunk)
                     retry_count += 1
@@ -397,32 +400,32 @@ def Final_A(i, file):
 
             #####################Lien Part Added##############################Start
             driver.close()
-            #print("line 436")
+            # print("line 436")
 
             pattern = r'\d{2}-\d{2}-\d{4}'
             match = re.search(pattern, aq)
             Splitting = (match.group())
             Replaced = Splitting.replace('-', '/')
-            #print(Replaced)
+            # print(Replaced)
 
-            #print("line 438")
+            # print("line 438")
             Effective_Date = datetime.strptime(Replaced, '%m/%d/%Y')
-            #print(Effective_Date)
-            #print("line 440")
+            # print(Effective_Date)
+            # print("line 440")
 
             STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
             FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
             UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
             JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
             HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
-            #print("line 446")
-            #print(df)
+            # print("line 446")
+            # print(df)
             df['Doc Recorded'] = pd.to_datetime(df['Doc Recorded'], format='%m/%d/%Y')
-            #print("line 458")
+            # print("line 458")
             Liens = df['Doc Type'].str.contains('JUDGMENT|LIEN|STATE LIEN|FEDERAL LIEN|UCC|HOA',
                                                 case=False, regex=True)
             filterd_df = df[Liens]
-            #print("line 453")
+            # print("line 453")
             FED = filterd_df[
                 ((filterd_df['Doc Type'] == 'FEDERAL LIEN') & (filterd_df['Doc Recorded'] >= FED_TAX_DATE))]
             ST = filterd_df[
@@ -431,7 +434,7 @@ def Final_A(i, file):
             JUD = filterd_df[
                 ((filterd_df['Doc Type'] == 'JUDGMENT') & (filterd_df['Doc Recorded'] >= JDG_DATE))]
             HOA = filterd_df[((filterd_df['Doc Type'] == 'HOA') & (filterd_df['Doc Recorded'] >= HOA_DATE))]
-            #print("line 471")
+            # print("line 471")
             with pd.ExcelWriter(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                     EXCELORDERNO) + '\\LeinDocSN.xlsx') as writer:
                 FED.to_excel(writer, sheet_name='Sheet1', index=False, startrow=0)
@@ -440,7 +443,7 @@ def Final_A(i, file):
                 JUD.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(UCC) + 1, header=False)
                 HOA.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(JUD) + 1, header=False)
 
-            #print("line 480")
+            # print("line 480")
             dataframe2 = pd.read_excel(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                 EXCELORDERNO) + '\\LeinDocSN.xlsx')
 
@@ -452,7 +455,7 @@ def Final_A(i, file):
             time.sleep(2)
             driver = webdriver.Chrome(options=chrome_options)
             time.sleep(2)
-            #print("line 492")
+            # print("line 492")
             for Document_Number in (dataframe2['Doc Number']):
                 time.sleep(1)
                 driver.get('https://crs.cookcountyclerkil.gov/Search')
@@ -514,32 +517,32 @@ def Final_A(i, file):
 
             #####################Lien Part Added##############################Start
             driver.close()
-            #print("line 553")
+            # print("line 553")
 
             pattern = r'\d{2}-\d{2}-\d{4}'
             match = re.search(pattern, aq)
             Splitting = (match.group())
             Replaced = Splitting.replace('-', '/')
-            #print(Replaced)
+            # print(Replaced)
 
-            #print("line 561")
+            # print("line 561")
             Effective_Date = datetime.strptime(Replaced, '%m/%d/%Y')
-            #print(Effective_Date)
-            #print("line 564")
+            # print(Effective_Date)
+            # print("line 564")
 
             STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
             FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
             UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
             JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
             HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
-            #print("line 571")
+            # print("line 571")
 
             df1['Doc Recorded'] = pd.to_datetime(df1['Doc Recorded'], format='%m/%d/%Y')
-            #print("line 574")
+            # print("line 574")
             Liens = df1['Doc Type'].str.contains('JUDGMENT|LIEN|STATE LIEN|FEDERAL LIEN|UCC|HOA',
                                                  case=False, regex=True)
             filterd_df = df1[Liens]
-            #print("line 587")
+            # print("line 587")
             FED = filterd_df[
                 ((filterd_df['Doc Type'] == 'FEDERAL LIEN') & (filterd_df['Doc Recorded'] >= FED_TAX_DATE))]
             ST = filterd_df[
@@ -548,7 +551,7 @@ def Final_A(i, file):
             JUD = filterd_df[
                 ((filterd_df['Doc Type'] == 'JUDGMENT') & (filterd_df['Doc Recorded'] >= JDG_DATE))]
             HOA = filterd_df[((filterd_df['Doc Type'] == 'HOA') & (filterd_df['Doc Recorded'] >= HOA_DATE))]
-            #print("line 587")
+            # print("line 587")
             with pd.ExcelWriter(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                     EXCELORDERNO) + '\\LeinDocSN.xlsx') as writer:
                 FED.to_excel(writer, sheet_name='Sheet1', index=False, startrow=0)
@@ -557,7 +560,7 @@ def Final_A(i, file):
                 JUD.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(UCC) + 1, header=False)
                 HOA.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(JUD) + 1, header=False)
 
-            #print("line 596")
+            # print("line 596")
             dataframe2 = pd.read_excel(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                 EXCELORDERNO) + '\\LeinDocSN.xlsx')
 
@@ -569,7 +572,7 @@ def Final_A(i, file):
         time.sleep(2)
         driver = webdriver.Chrome(options=chrome_options)
         time.sleep(2)
-        #print("line 492")
+        # print("line 492")
         for Document_Number in (dataframe2['Doc Number']):
             time.sleep(1)
             driver.get('https://crs.cookcountyclerkil.gov/Search')
@@ -611,31 +614,30 @@ def Final_A(i, file):
                     retry_count += 1
         #####################Lien Part Added##############################End
 
-
-###################################################first borrower name part#######################
+    ###################################################first borrower name part#######################
 
     time.sleep(4)
     driver.get('https://crs.cookcountyclerkil.gov/Search')
     time.sleep(4)
-    
+
     # driver.find_element(By.XPATH,
     # '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').clear()
     driver.find_element(By.XPATH,
                         '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').send_keys(
         EXCELNAME, Keys.ENTER)
-    
+
     z = driver.find_element(By.XPATH, '//*[@id="result"]/div[1]/div/span[1]').text
     z = (z.replace(",", ""))
     total = int(z)  # (int(z) // int(100) - 1)
     df1 = pd.DataFrame()
     # print(total)
-    
+
     Cnumber1 = driver.find_element(By.XPATH,
                                    '/html/body/div[2]/div/div[3]/div/form[2]/div[4]/div[1]/div/span[1]').text
     # print(Cnumber1)
-    
+
     if total >= int(100):
-    
+
         qq = driver.find_element(By.XPATH, '//*[@id="Paging"]/div/ul/li[2]/a').get_attribute("href")
         qq = qq[:len(qq) - 1]
         # print(qq)
@@ -645,18 +647,18 @@ def Final_A(i, file):
         # print(df)
         df1 = df1.append(df)
         # df1= df1.append(df)
-    
+
         r = requests.get(qq)
         time.sleep(2)
         soup = BeautifulSoup(r.text, 'lxml')
-    
+
         df1 = pd.DataFrame()
         j = 1
-    
+
         CC = int(total) / 100
         roundoff1 = round(CC)
         # print(roundoff1)
-    
+
         while int(j) < int(roundoff1):
             Np = soup.find("a", rel='next').get("href")
             cnp = "https://crs.cookcountyclerkil.gov" + Np
@@ -669,7 +671,7 @@ def Final_A(i, file):
             updated = updated + str(j)
             # updated = url.rstrip('0123456789')
             # print(updated)
-    
+
             max_retry = 3
             retry_count = 0
             while retry_count < max_retry:
@@ -679,10 +681,10 @@ def Final_A(i, file):
                     # print(updated)
                     retry_count += 1
                     break
-    
+
                 except Exception as e:
                     retry_count += 1
-    
+
             soup = BeautifulSoup(r.content, 'html.parser')
             table = soup.find('table')
             time.sleep(3)
@@ -691,23 +693,23 @@ def Final_A(i, file):
             # print(df)
             df1 = df1.append(df)
             # print(df1)
-    
+
             j += 1
             # print(j)
-    
+
         # df1.to_excel('D:\Title_Files\Output\COOK_COUNTY\Order No 1192237\c.xlsx', index=False)  # index=False
         df1.to_excel(
             os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + '\\DataExtraction.xlsx',
             index=False)
-    
+
         df = pd.read_excel(
             os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(EXCELORDERNO) + '\\DataExtraction.xlsx',
             engine='openpyxl')
-    
+
         df['APN Number'] = df['1st PIN'].str.split(' ').str[0]
         APN = str(EXCELAPN)  # '02-08-400-010-0000'
         indices = df.loc[df['APN Number'] == APN].index.tolist()
-    
+
         a = []
         # print indices of all matches one by one
         for w in indices:
@@ -717,11 +719,11 @@ def Final_A(i, file):
             else:
                 # print("Index:", round(w / 100))
                 a.append(round(w / 100))
-    
+
         unique_numbers = []
         [unique_numbers.append(num) for num in a if num not in unique_numbers]
         # print(unique_numbers)
-    
+
         l = 1
         for k in unique_numbers:
             driver.get(qq + str(k))
@@ -731,39 +733,39 @@ def Final_A(i, file):
             path = os.getcwd() + '\\Output\\COOK_COUNTY\\' + "Order No " + str(
                 EXCELORDERNO) + '\\Name Search' + str(l) + '.pdf'
             pyautogui.typewrite(path)
-    
+
             pyautogui.press('enter')
             time.sleep(8)
             l += 1
-    
+
             #####################Lien Part Added##############################Start
         driver.close()
-        #print("line 777")
-    
+        # print("line 777")
+
         pattern = r'\d{2}-\d{2}-\d{4}'
         match = re.search(pattern, aq)
         Splitting = (match.group())
         Replaced = Splitting.replace('-', '/')
-        #print(Replaced)
-    
-        #print("line 785")
+        # print(Replaced)
+
+        # print("line 785")
         Effective_Date = datetime.strptime(Replaced, '%m/%d/%Y')
-        #print(Effective_Date)
-        #print("line 788")
-    
+        # print(Effective_Date)
+        # print("line 788")
+
         STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
         FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
         UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
         JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
         HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
-        #print("line 795")
+        # print("line 795")
         time.sleep(2)
         df['Doc Recorded'] = pd.to_datetime(df['Doc Recorded'], format='%m/%d/%Y')
-        #print("line 798")
+        # print("line 798")
         Liens = df['Doc Type'].str.contains('JUDGMENT|LIEN|STATE LIEN|FEDERAL LIEN|UCC|HOA',
                                             case=False, regex=True)
         filterd_df = df[Liens]
-        #print("line 802")
+        # print("line 802")
         FED = filterd_df[
             ((filterd_df['Doc Type'] == 'FEDERAL LIEN') & (filterd_df['Doc Recorded'] >= FED_TAX_DATE))]
         ST = filterd_df[
@@ -772,7 +774,7 @@ def Final_A(i, file):
         JUD = filterd_df[
             ((filterd_df['Doc Type'] == 'JUDGMENT') & (filterd_df['Doc Recorded'] >= JDG_DATE))]
         HOA = filterd_df[((filterd_df['Doc Type'] == 'HOA') & (filterd_df['Doc Recorded'] >= HOA_DATE))]
-        #print("line 811")
+        # print("line 811")
         with pd.ExcelWriter(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                 EXCELORDERNO) + '\\LeinDocFN.xlsx') as writer:
             FED.to_excel(writer, sheet_name='Sheet1', index=False, startrow=0)
@@ -780,11 +782,11 @@ def Final_A(i, file):
             UCC.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(ST) + 1, header=False)
             JUD.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(UCC) + 1, header=False)
             HOA.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(JUD) + 1, header=False)
-    
-        #print("line 820")
+
+        # print("line 820")
         dataframe2 = pd.read_excel(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
             EXCELORDERNO) + '\\LeinDocFN.xlsx')
-    
+
         chrome_driver = 'chromedriver_win32\chromedriver.exe'
         time.sleep(1)
         chrome_options = Options()
@@ -793,7 +795,7 @@ def Final_A(i, file):
         time.sleep(2)
         driver = webdriver.Chrome(options=chrome_options)
         time.sleep(2)
-        #print("line 833")
+        # print("line 833")
         for Document_Number in (dataframe2['Doc Number']):
             time.sleep(1)
             driver.get('https://crs.cookcountyclerkil.gov/Search')
@@ -804,7 +806,7 @@ def Final_A(i, file):
             time.sleep(5)
             h = driver.find_element(By.XPATH, '//*[@id="tblData"]/tbody/tr/td[2]/a').get_attribute('href')
             driver.get(h)
-    
+
             WebDriverWait(driver, 15).until(EC.presence_of_element_located(
                 (By.XPATH, '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a')))
             LienType = driver.find_element(By.XPATH, '//*[@id="divcol1"]/div[1]/table/tbody/tr[2]/td').text
@@ -813,7 +815,7 @@ def Final_A(i, file):
             LinkF = driver.find_element(By.XPATH,
                                         '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
                 'href')
-    
+
             max_retry = 5
             retry_count = 0
             while retry_count < max_retry:  # to download the pdf Document file
@@ -821,28 +823,28 @@ def Final_A(i, file):
                     time.sleep(2)
                     r = requests.get(LinkF)
                     time.sleep(1)
-    
+
                     with open(
                             os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                                 EXCELORDERNO) + '\\' + LienType + ' ' + LienNumber + '.pdf',
                             'wb') as fd:
                         for chunk in r.iter_content(chunk_size=40):
                             fd.write(chunk)
-    
+
                     break
-    
+
                 except Exception as e:
                     retry_count += 1
             #####################Lien Part Added##############################End
-    
-    
-    
+
+
+
     else:
-    
+
         FirstNameExtraction = driver.find_element(By.XPATH, '//table')
-    
+
         df1 = pd.read_html(FirstNameExtraction.get_attribute('outerHTML'))[0]
-    
+
         df1.to_excel(
             os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
                 EXCELORDERNO) + '\\DataExtraction.xlsx',
@@ -857,56 +859,58 @@ def Final_A(i, file):
         time.sleep(2)
         pyautogui.press('enter')
         time.sleep(6)
-    
+
         #####################Lien Part Added##############################Start
         driver.close()
         # print("line 900")
-    
+
         pattern = r'\d{2}-\d{2}-\d{4}'
-        match = re.search(pattern, aq)
-        Splitting = (match.group())
-        Replaced = Splitting.replace('-', '/')
-        # print(Replaced)
-    
-        # print("line 908")
-        Effective_Date = datetime.strptime(Replaced, '%m/%d/%Y')
-        # print(Effective_Date)
-        # print("line 911")
-    
-        STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
-        FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
-        UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
-        JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
-        HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
-        # print("line 918")
-    
-        df1['Doc Recorded'] = pd.to_datetime(df1['Doc Recorded'], format='%m/%d/%Y')
-        # print("line 921")
-        Liens = df1['Doc Type'].str.contains('JUDGMENT|LIEN|STATE LIEN|FEDERAL LIEN|UCC|HOA',
-                                             case=False, regex=True)
-        filterd_df = df1[Liens]
-        # print("line 925")
-        FED = filterd_df[
-            ((filterd_df['Doc Type'] == 'FEDERAL LIEN') & (filterd_df['Doc Recorded'] >= FED_TAX_DATE))]
-        ST = filterd_df[
-            ((filterd_df['Doc Type'] == 'STATE LIEN') & (filterd_df['Doc Recorded'] >= STATE_LEIN_DATE))]
-        UCC = filterd_df[((filterd_df['Doc Type'] == 'UCC') & (filterd_df['Doc Recorded'] >= UCC_DATE))]
-        JUD = filterd_df[
-            ((filterd_df['Doc Type'] == 'JUDGMENT') & (filterd_df['Doc Recorded'] >= JDG_DATE))]
+    match = re.search(pattern, aq)
+    Splitting = (match.group())
+    Replaced = Splitting.replace('-', '/')
+    # print(Replaced)
+
+    # print("line 908")
+    Effective_Date = datetime.strptime(Replaced, '%m/%d/%Y')
+    # print(Effective_Date)
+    # print("line 911")
+
+    STATE_LEIN_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Sate Tax
+    FED_TAX_DATE = Effective_Date - timedelta(days=365 * 10)  # Qualifying Date For Fed Tax
+    UCC_DATE = Effective_Date - timedelta(days=365 * 5)  # Qualifying Date For UCC
+    JDG_DATE = Effective_Date - timedelta(days=365 * 20)  # Qualifying Date For Judgemnt
+    HOA_DATE = Effective_Date - timedelta(days=365 * 5)  ##Qualifying Date For HOA
+    # print("line 918")
+
+    df1['Doc Recorded'] = pd.to_datetime(df1['Doc Recorded'], format='%m/%d/%Y')
+    # print("line 921")
+    Liens = df1['Doc Type'].str.contains('JUDGMENT|LIEN|STATE LIEN|FEDERAL LIEN|UCC|HOA',
+                                         case=False, regex=True)
+    filterd_df = df1[Liens]
+    # print("line 925")
+    FED = filterd_df[
+        ((filterd_df['Doc Type'] == 'FEDERAL LIEN') & (filterd_df['Doc Recorded'] >= FED_TAX_DATE))]
+    ST = filterd_df[
+        ((filterd_df['Doc Type'] == 'STATE LIEN') & (filterd_df['Doc Recorded'] >= STATE_LEIN_DATE))]
+    UCC = filterd_df[((filterd_df['Doc Type'] == 'UCC') & (filterd_df['Doc Recorded'] >= UCC_DATE))]
+    JUD = filterd_df[
+        ((filterd_df['Doc Type'] == 'JUDGMENT') & (filterd_df['Doc Recorded'] >= JDG_DATE))]
+
+
     HOA = filterd_df[((filterd_df['Doc Type'] == 'HOA') & (filterd_df['Doc Recorded'] >= HOA_DATE))]
     # print("line 934")
     with pd.ExcelWriter(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
-            EXCELORDERNO) + '\\LeinDocFN.xlsx') as writer:
+        EXCELORDERNO) + '\\LeinDocFN.xlsx') as writer:
         FED.to_excel(writer, sheet_name='Sheet1', index=False, startrow=0)
         ST.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(FED) + 1, header=False)
         UCC.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(ST) + 1, header=False)
         JUD.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(UCC) + 1, header=False)
         HOA.to_excel(writer, sheet_name='Sheet1', index=False, startrow=len(JUD) + 1, header=False)
-    
+
     # print("line 943")
     dataframe2 = pd.read_excel(os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
         EXCELORDERNO) + '\\LeinDocFN.xlsx')
-    
+
     chrome_driver = 'chromedriver_win32\chromedriver.exe'
     time.sleep(1)
     chrome_options = Options()
@@ -920,43 +924,42 @@ def Final_A(i, file):
         time.sleep(1)
         driver.get('https://crs.cookcountyclerkil.gov/Search')
         driver.find_element(By.XPATH,
-                            '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').send_keys(
-            Document_Number, Keys.ENTER)
+                        '/html/body/div[2]/div/div[3]/div/div/form/div[2]/div[2]/div[3]/div/div[2]/input').send_keys(
+        Document_Number, Keys.ENTER)
         driver.maximize_window()
         time.sleep(5)
         h = driver.find_element(By.XPATH, '//*[@id="tblData"]/tbody/tr/td[2]/a').get_attribute('href')
         driver.get(h)
-    
+
         WebDriverWait(driver, 15).until(EC.presence_of_element_located(
-            (By.XPATH, '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a')))
+        (By.XPATH, '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a')))
         LienType = driver.find_element(By.XPATH, '//*[@id="divcol1"]/div[1]/table/tbody/tr[2]/td').text
         LienNumber = driver.find_element(By.XPATH,
-                                         '//*[@id="divcol1"]/div[1]/table/tbody/tr[1]/td').text
+                                     '//*[@id="divcol1"]/div[1]/table/tbody/tr[1]/td').text
         LinkF = driver.find_element(By.XPATH,
-                                    '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
-            'href')
-    
+                                '/html/body/div[2]/div/div[3]/div/div/fieldset/div[1]/div[2]/div/div/div/a').get_attribute(
+        'href')
+
         max_retry = 5
         retry_count = 0
         while retry_count < max_retry:  # to download the pdf Document file
-            try:
-                time.sleep(2)
-                r = requests.get(LinkF)
-                time.sleep(1)
-    
-                with open(
-                        os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
-                            EXCELORDERNO) + '\\' + LienType + ' ' + LienNumber + '.pdf',
-                        'wb') as fd:
-                    for chunk in r.iter_content(chunk_size=40):
-                        fd.write(chunk)
-    
-                break
-    
-            except Exception as e:
-                retry_count += 1
-    #####################Lien Part Added##############################End
-    
-    
-    time.sleep(2)
-    
+         try:
+            time.sleep(2)
+            r = requests.get(LinkF)
+            time.sleep(1)
+
+            with open(
+                    os.getcwd() + "\\Output\\COOK_COUNTY\\" + "Order No " + str(
+                        EXCELORDERNO) + '\\' + LienType + ' ' + LienNumber + '.pdf',
+                    'wb') as fd:
+                for chunk in r.iter_content(chunk_size=40):
+                    fd.write(chunk)
+
+            break
+
+         except Exception as e:
+            retry_count += 1
+#####################Lien Part Added##############################End
+
+
+time.sleep(2)
